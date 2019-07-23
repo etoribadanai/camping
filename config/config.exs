@@ -28,3 +28,7 @@ config :phoenix, :json_library, Jason
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
 import_config "#{Mix.env()}.exs"
+
+config :camping, Camping.Guardian,
+  issuer: "camping",
+  secret_key: "TfGWNF0GdRKIpC9ysITNTv8kNc2Y0LZSG1+fQjz49YMTJR+O1rfrBfWLhihvKWtM"

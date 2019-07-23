@@ -1,5 +1,6 @@
 defmodule CampingWeb.Router do
   use CampingWeb, :router
+  alias Camping.Guardian
 
   pipeline :browser do
     plug :accepts, ["html"]
@@ -13,6 +14,10 @@ defmodule CampingWeb.Router do
     plug :accepts, ["json"]
   end
 
+  pipeline :jwt_authenticated do
+    plug Guardian.AuthPipeline
+  end
+
   scope "/", CampingWeb do
     pipe_through :browser
 
@@ -21,7 +26,10 @@ defmodule CampingWeb.Router do
 
   # Other scopes may use custom stacks.
   scope "/api/v1", CampingWeb do
-    pipe_through :api
-    resources "/users", UserController, only: [:create, :show]
+    pipe_through [:api, :jwt_authenticated]
+
+    post "/sign_up", UserController, :create
+    post "/sign_in", UserController, :sign_in
+    get "/my_user", UserController, :show
   end
 end
