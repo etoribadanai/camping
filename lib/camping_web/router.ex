@@ -20,7 +20,8 @@ defmodule CampingWeb.Router do
   end
 
   # Other scopes may use custom stacks.
-  # scope "/api", CampingWeb do
-  #   pipe_through :api
-  # end
+  scope "/api/v1", CampingWeb do
+    pipe_through :api
+    resources "/users", UserController, only: [:create, :show]
+  end
 end
