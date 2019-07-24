@@ -26,10 +26,15 @@ defmodule CampingWeb.Router do
 
   # Other scopes may use custom stacks.
   scope "/api/v1", CampingWeb do
-    pipe_through [:api, :jwt_authenticated]
+    pipe_through [:api]
 
     post "/sign_up", UserController, :create
     post "/sign_in", UserController, :sign_in
+  end
+
+  scope "/api/v1", CampingWeb do
+    pipe_through [:api, :jwt_authenticated]
+
     get "/my_user", UserController, :show
   end
 end
