@@ -6,7 +6,7 @@ defmodule Camping.Accounts do
   import Ecto.Query, warn: false
   alias Camping.Repo
 
-  alias Camping.Accounts.User
+  alias Camping.Accounts.Schemas.User
   alias Camping.Guardian
   import Comeonin.Bcrypt, only: [checkpw: 2, dummy_checkpw: 0]
 

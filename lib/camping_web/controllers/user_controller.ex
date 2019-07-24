@@ -2,7 +2,7 @@ defmodule CampingWeb.UserController do
   use CampingWeb, :controller
 
   alias Camping.Accounts
-  alias Camping.Accounts.User
+  alias Camping.Accounts.Schemas.User
   alias Camping.Guardian
 
   action_fallback CampingWeb.FallbackController
