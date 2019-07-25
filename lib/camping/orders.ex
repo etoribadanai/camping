@@ -26,14 +26,14 @@ defmodule Camping.Orders do
 
   ## Examples
 
-      iex> get_order!(123)
+      iex> get_order(123)
       %Order{}
 
-      iex> get_order!(456)
-      ** (Ecto.NoResultsError)
+      iex> get_order(456)
+      ** nil
 
   """
-  def get_order!(id), do: Repo.get!(Order, id)
+  def get_order(id), do: Repo.get(Order, id)
 
   @doc """
   Creates a order.
