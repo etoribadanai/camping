@@ -6,7 +6,7 @@ defmodule Camping.Accounts do
   import Ecto.Query, warn: false
   alias Camping.Repo
 
-  alias Camping.Accounts.User
+  alias Camping.Accounts.Schemas.User
   alias Camping.Guardian
   import Comeonin.Bcrypt, only: [checkpw: 2, dummy_checkpw: 0]
 
@@ -38,6 +38,22 @@ defmodule Camping.Accounts do
 
   """
   def get_user!(id), do: Repo.get!(User, id)
+
+  @doc """
+  Gets a single user based on passed fields
+
+  Returns nil when user doesn't exist.
+
+  ## Examples
+
+      iex> get_by([token: "12345678900"])
+      %Customer{}
+
+      iex> get_by([token: "123"])
+      nil
+
+  """
+  def get_by(fields), do: Repo.get_by(User, fields)
 
   def token_sign_in(email, password) do
     case email_password_auth(email, password) do

@@ -4,7 +4,7 @@ defmodule Camping.AccountsTest do
   alias Camping.Accounts
 
   describe "users" do
-    alias Camping.Accounts.User
+    alias Camping.Accounts.Schemas.User
 
     @valid_attrs %{email: "some email", password_hash: "some password_hash"}
     @update_attrs %{email: "some updated email", password_hash: "some updated password_hash"}

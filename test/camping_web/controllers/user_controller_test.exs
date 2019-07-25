@@ -2,7 +2,7 @@ defmodule CampingWeb.UserControllerTest do
   use CampingWeb.ConnCase
 
   alias Camping.Accounts
-  alias Camping.Accounts.User
+  alias Camping.Accounts.Schemas.User
 
   @create_attrs %{
     email: "some email",

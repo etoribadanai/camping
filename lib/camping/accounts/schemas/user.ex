@@ -1,7 +1,7 @@
-defmodule Camping.Accounts.User do
+defmodule Camping.Accounts.Schemas.User do
   use Ecto.Schema
   import Ecto.Changeset
-  alias Camping.Accounts.User
+  alias Camping.Accounts.Schemas.User
 
   import Comeonin.Bcrypt, only: [hashpwsalt: 1]
 
