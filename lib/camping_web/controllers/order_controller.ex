@@ -2,24 +2,30 @@ defmodule CampingWeb.OrderController do
   use CampingWeb, :controller
 
   alias Camping.Orders
-  alias Camping.Accounts
+  alias Camping.Orders.Order.HandleCreate
   alias Camping.Accounts.Schemas.User
+  alias Camping.Guardian
+
+  action_fallback CampingWeb.FallbackController
 
   def index(conn, _params) do
     orders = Orders.list_order()
     json(conn, %{data: orders})
   end
 
-  def show(conn, %{"id" => id}) do
-    order = Orders.get_order!(id)
-    json(conn, %{data: order})
+  def create(conn, params) do
+    with %User{} = user <- Guardian.Plug.current_resource(conn) do
+      params
+      |> HandleCreate.create(user.id)
+      |> handle_create_order(conn)
+    end
   end
 
-  def create(conn, %{"order" => order_params}) do
-    [token | _tail] = get_req_header(conn, "authorization")
+  defp handle_create_order({:ok, order}, conn), do: json(conn, %{order_id: order.id})
+  defp handle_create_order({:error, msg}, conn), do: json(conn, %{message: msg})
 
-    with %User{} = user <- Accounts.get_by(token: token) do
-      # create order
-    end
+  def show(conn, %{"id" => id}) do
+    order = Orders.get_order(id)
+    json(conn, %{data: order})
   end
 end
