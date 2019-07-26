@@ -10,7 +10,7 @@ defmodule CampingWeb.OrderController do
 
   def index(conn, _params) do
     orders = Orders.list_order()
-    json(conn, %{data: orders})
+    render(conn, "index.json", orders: orders)
   end
 
   def create(conn, params) do
@@ -26,6 +26,6 @@ defmodule CampingWeb.OrderController do
 
   def show(conn, %{"id" => id}) do
     order = Orders.get_order(id)
-    json(conn, %{data: order})
+    render(conn, "show.json", order: order)
   end
 end
