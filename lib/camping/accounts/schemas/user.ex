@@ -10,6 +10,7 @@ defmodule Camping.Accounts.Schemas.User do
     field :password_hash, :string
     field :password, :string, virtual: true
     field :password_confirmation, :string, virtual: true
+    field :token, :string
 
     timestamps()
   end
@@ -17,8 +18,8 @@ defmodule Camping.Accounts.Schemas.User do
   @doc false
   def changeset(%User{} = user, attrs) do
     user
-    |> cast(attrs, [:email, :password, :password_confirmation])
-    |> validate_required([:email, :password, :password_confirmation])
+    |> cast(attrs, [:email, :password, :password_confirmation, :token])
+    |> validate_required([:email, :password, :password_confirmation, :token])
     |> validate_format(:email, ~r/@/)
     |> validate_length(:password, min: 8)
     |> validate_confirmation(:password)
