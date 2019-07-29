@@ -14,7 +14,8 @@ defmodule CampingWeb.UserController do
 
   def create(conn, %{"user" => user_params}) do
     with {:ok, %User{} = user} <- Accounts.create_user(user_params),
-         {:ok, token, _claims} <- Guardian.encode_and_sign(user) do
+         {:ok, token, _claims} <- Guardian.encode_and_sign(user),
+         {:ok, _} <- Accounts.store_token(user, token) do
       conn |> render("jwt.json", jwt: token)
     end
   end
@@ -22,6 +23,7 @@ defmodule CampingWeb.UserController do
   def sign_in(conn, %{"email" => email, "password" => password}) do
     case Accounts.token_sign_in(email, password) do
       {:ok, token, _claims} ->
+        Accounts.store_token(user, token)
         conn |> render("jwt.json", jwt: token)
 
       _ ->

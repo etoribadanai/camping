@@ -59,7 +59,6 @@ defmodule Camping.Accounts do
     case email_password_auth(email, password) do
       {:ok, user} ->
         Guardian.encode_and_sign(user)
-
       _ ->
         {:error, :unauthorized}
     end
@@ -87,6 +86,21 @@ defmodule Camping.Accounts do
     else
       {:error, :invalid_password}
     end
+  end
+
+  @doc """
+  Returns an updated user with new JWT stored in DB.
+
+  ## Examples
+
+      iex> store_token(user, token)
+      {:ok, %User{}}
+
+  """
+  def store_token(%User{} = user, token) do
+    user
+    |> Ecto.Changeset.change(%{token: token})
+    |> UserRepo.update()
   end
 
   @doc """
