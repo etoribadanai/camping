@@ -4,7 +4,9 @@ defmodule Camping.Products.Schemas.Product do
 
   schema "products" do
     field :code, :integer
+    field :name, :string
     field :description, :string
+    field :category, :string
     field :brand, :string
     field :obs, :string
     field :stock, :integer
@@ -19,7 +21,9 @@ defmodule Camping.Products.Schemas.Product do
     product
     |> cast(attrs, [
       :code,
+      :name,
       :description,
+      :category,
       :brand,
       :obs,
       :stock,
