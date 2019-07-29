@@ -22,6 +22,7 @@ defmodule CampingWeb.UserController do
   def sign_in(conn, %{"email" => email, "password" => password}) do
     case Accounts.token_sign_in(email, password) do
       {:ok, token, _claims} ->
+        Accounts.store_token(user, token)
         conn |> render("jwt.json", jwt: token)
 
       _ ->
