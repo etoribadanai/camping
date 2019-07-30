@@ -56,11 +56,12 @@ defmodule Camping.Accounts do
   def get_by(fields), do: Repo.get_by(User, fields)
 
   def token_sign_in(email, password) do
-    case email_password_auth(email, password) do
-      {:ok, user} ->
-        Guardian.encode_and_sign(user)
-      _ ->
-        {:error, :unauthorized}
+    with {:ok, user} <- email_password_auth(email, password),
+         {:ok, token, _claims} = Guardian.encode_and_sign(user),
+         {:ok, _} <- store_token(user, token) do
+      {:ok, token}
+    else
+      _ -> {:error, :unauthorized}
     end
   end
 
@@ -100,7 +101,7 @@ defmodule Camping.Accounts do
   def store_token(%User{} = user, token) do
     user
     |> Ecto.Changeset.change(%{token: token})
-    |> UserRepo.update()
+    |> Repo.update()
   end
 
   @doc """
