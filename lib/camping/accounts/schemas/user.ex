@@ -1,11 +1,11 @@
-defmodule Camping.Accounts.Schemas.User do
+defmodule Camping.Accounts.Schemas.Customer do
   use Ecto.Schema
   import Ecto.Changeset
-  alias Camping.Accounts.Schemas.User
+  alias Camping.Accounts.Schemas.Customer
 
   import Comeonin.Bcrypt, only: [hashpwsalt: 1]
 
-  schema "users" do
+  schema "customers" do
     field :email, :string
     field :password_hash, :string
     field :password, :string, virtual: true
@@ -16,8 +16,8 @@ defmodule Camping.Accounts.Schemas.User do
   end
 
   @doc false
-  def changeset(%User{} = user, attrs) do
-    user
+  def changeset(%Customer{} = customer, attrs) do
+    customer
     |> cast(attrs, [:email, :password, :password_confirmation, :token])
     |> validate_required([:email, :password, :password_confirmation])
     |> validate_format(:email, ~r/@/)

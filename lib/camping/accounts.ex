@@ -6,43 +6,43 @@ defmodule Camping.Accounts do
   import Ecto.Query, warn: false
   alias Camping.Repo
 
-  alias Camping.Accounts.Schemas.User
+  alias Camping.Accounts.Schemas.Customer
   alias Camping.Guardian
   import Comeonin.Bcrypt, only: [checkpw: 2, dummy_checkpw: 0]
 
   @doc """
-  Returns the list of users.
+  Returns the list of customers.
 
   ## Examples
 
-      iex> list_users()
-      [%User{}, ...]
+      iex> list_customers()
+      [%Customer{}, ...]
 
   """
-  def list_users do
-    Repo.all(User)
+  def list_customers do
+    Repo.all(Customer)
   end
 
   @doc """
-  Gets a single user.
+  Gets a single customer.
 
-  Raises `Ecto.NoResultsError` if the User does not exist.
+  Raises `Ecto.NoResultsError` if the customer does not exist.
 
   ## Examples
 
-      iex> get_user!(123)
-      %User{}
+      iex> get_customer!(123)
+      %Customer{}
 
-      iex> get_user!(456)
+      iex> get_customer!(456)
       ** (Ecto.NoResultsError)
 
   """
-  def get_user!(id), do: Repo.get!(User, id)
+  def get_customer!(id), do: Repo.get!(Customer, id)
 
   @doc """
-  Gets a single user based on passed fields
+  Gets a single customer based on passed fields
 
-  Returns nil when user doesn't exist.
+  Returns nil when customer doesn't exist.
 
   ## Examples
 
@@ -53,12 +53,12 @@ defmodule Camping.Accounts do
       nil
 
   """
-  def get_by(fields), do: Repo.get_by(User, fields)
+  def get_by(fields), do: Repo.get_by(Customer, fields)
 
   def token_sign_in(email, password) do
-    with {:ok, user} <- email_password_auth(email, password),
-         {:ok, token, _claims} = Guardian.encode_and_sign(user),
-         {:ok, _} <- store_token(user, token) do
+    with {:ok, customer} <- email_password_auth(email, password),
+         {:ok, token, _claims} = Guardian.encode_and_sign(customer),
+         {:ok, _} <- store_token(customer, token) do
       {:ok, token}
     else
       _ -> {:error, :unauthorized}
@@ -66,106 +66,106 @@ defmodule Camping.Accounts do
   end
 
   defp email_password_auth(email, password) when is_binary(email) and is_binary(password) do
-    with {:ok, user} <- get_by_email(email),
-         do: verify_password(password, user)
+    with {:ok, customer} <- get_by_email(email),
+         do: verify_password(password, customer)
   end
 
   defp get_by_email(email) when is_binary(email) do
-    case Repo.get_by(User, email: email) do
+    case Repo.get_by(Customer, email: email) do
       nil ->
         dummy_checkpw()
         {:error, "Login error."}
 
-      user ->
-        {:ok, user}
+      customer ->
+        {:ok, customer}
     end
   end
 
-  defp verify_password(password, %User{} = user) when is_binary(password) do
-    if checkpw(password, user.password_hash) do
-      {:ok, user}
+  defp verify_password(password, %Customer{} = customer) when is_binary(password) do
+    if checkpw(password, customer.password_hash) do
+      {:ok, customer}
     else
       {:error, :invalid_password}
     end
   end
 
   @doc """
-  Returns an updated user with new JWT stored in DB.
+  Returns an updated customer with new JWT stored in DB.
 
   ## Examples
 
-      iex> store_token(user, token)
-      {:ok, %User{}}
+      iex> store_token(customer, token)
+      {:ok, %Customer{}}
 
   """
-  def store_token(%User{} = user, token) do
-    user
-    |> Ecto.Changeset.change(%{token: token})
-    |> Repo.update()
-  end
+  # def store_token(%User{} = user, token) do
+  #   user
+  #   |> Ecto.Changeset.change(%{token: token})
+  #   |> Repo.update()
+  # end
 
   @doc """
-  Creates a user.
+  Creates a customer.
 
   ## Examples
 
-      iex> create_user(%{field: value})
-      {:ok, %User{}}
+      iex> create_customer(%{field: value})
+      {:ok, %Customer{}}
 
-      iex> create_user(%{field: bad_value})
+      iex> create_customer(%{field: bad_value})
       {:error, %Ecto.Changeset{}}
 
   """
-  def create_user(attrs \\ %{}) do
-    %User{}
-    |> User.changeset(attrs)
+  def create_customer(attrs \\ %{}) do
+    %Customer{}
+    |> Customer.changeset(attrs)
     |> Repo.insert()
   end
 
   @doc """
-  Updates a user.
+  Updates a customer.
 
   ## Examples
 
-      iex> update_user(user, %{field: new_value})
-      {:ok, %User{}}
+      iex> update_customer(customer, %{field: new_value})
+      {:ok, %Customer{}}
 
-      iex> update_user(user, %{field: bad_value})
+      iex> update_customer(customer, %{field: bad_value})
       {:error, %Ecto.Changeset{}}
 
   """
-  def update_user(%User{} = user, attrs) do
-    user
-    |> User.changeset(attrs)
+  def update_customer(%Customer{} = customer, attrs) do
+    customer
+    |> Customer.changeset(attrs)
     |> Repo.update()
   end
 
   @doc """
-  Deletes a User.
+  Deletes a customer.
 
   ## Examples
 
-      iex> delete_user(user)
-      {:ok, %User{}}
+      iex> delete_customer(customer)
+      {:ok, %Customer{}}
 
-      iex> delete_user(user)
+      iex> delete_customer(customer)
       {:error, %Ecto.Changeset{}}
 
   """
-  def delete_user(%User{} = user) do
-    Repo.delete(user)
+  def delete_customer(%Customer{} = customer) do
+    Repo.delete(customer)
   end
 
   @doc """
-  Returns an `%Ecto.Changeset{}` for tracking user changes.
+  Returns an `%Ecto.Changeset{}` for tracking customer changes.
 
   ## Examples
 
-      iex> change_user(user)
-      %Ecto.Changeset{source: %User{}}
+      iex> change_customer(customer)
+      %Ecto.Changeset{source: %Customer{}}
 
   """
-  def change_user(%User{} = user) do
-    User.changeset(user, %{})
+  def change_customer(%Customer{} = customer) do
+    Customer.changeset(customer, %{})
   end
 end
