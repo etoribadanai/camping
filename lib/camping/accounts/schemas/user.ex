@@ -19,7 +19,7 @@ defmodule Camping.Accounts.Schemas.User do
   def changeset(%User{} = user, attrs) do
     user
     |> cast(attrs, [:email, :password, :password_confirmation, :token])
-    |> validate_required([:email, :password, :password_confirmation, :token])
+    |> validate_required([:email, :password, :password_confirmation])
     |> validate_format(:email, ~r/@/)
     |> validate_length(:password, min: 8)
     |> validate_confirmation(:password)
