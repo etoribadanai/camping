@@ -1,4 +1,3 @@
-require IEx
 defmodule CampingWeb.CustomerController do
   use CampingWeb, :controller
 
@@ -14,20 +13,10 @@ defmodule CampingWeb.CustomerController do
   end
 
   def create(conn, %{"customer" => customer_params}) do
-    IEx.pry
-    with {:ok, %Customer{} = customer} <- Accounts.create_customer(customer_params),
-         {:ok, token, _claims} <- Guardian.encode_and_sign(customer),
-         {:ok, _} <- Accounts.store_token(customer, token) do
-      conn |> render("jwt.json", jwt: token)
-    end
-  end
-
-  def create(conn, %{"social" => customer_params}) do
-    IEx.pry()
 
     with {:ok, %Customer{} = customer} <- Accounts.create_customer(customer_params),
-         {:ok, token, _claims} <- Guardian.encode_and_sign(customer),
-         {:ok, _} <- Accounts.store_token(customer, token) do
+         {:ok, token, _claims} <- Guardian.encode_and_sign(customer) do
+        #  {:ok, _} <- Accounts.store_token(customer, token) do
       conn |> render("jwt.json", jwt: token)
     end
   end

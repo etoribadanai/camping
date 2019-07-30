@@ -57,8 +57,8 @@ defmodule Camping.Accounts do
 
   def token_sign_in(email, password) do
     with {:ok, customer} <- email_password_auth(email, password),
-         {:ok, token, _claims} = Guardian.encode_and_sign(customer),
-         {:ok, _} <- store_token(customer, token) do
+         {:ok, token, _claims} = Guardian.encode_and_sign(customer) do
+        #  {:ok, _} <- store_token(customer, token) do
       {:ok, token}
     else
       _ -> {:error, :unauthorized}
