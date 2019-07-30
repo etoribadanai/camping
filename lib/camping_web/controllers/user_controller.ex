@@ -22,8 +22,7 @@ defmodule CampingWeb.UserController do
 
   def sign_in(conn, %{"email" => email, "password" => password}) do
     case Accounts.token_sign_in(email, password) do
-      {:ok, token, _claims} ->
-        Accounts.store_token(user, token)
+      {:ok, token} ->
         conn |> render("jwt.json", jwt: token)
 
       _ ->
@@ -32,8 +31,14 @@ defmodule CampingWeb.UserController do
   end
 
   def show(conn, _params) do
+    #Ajustar o retorno do user, esta retornando certo sempre se eu passo um token antigo ou novo
     user = Guardian.Plug.current_resource(conn)
-    conn |> render("user.json", user: user)
+    # [token | _tail] = get_req_header(conn, "authorization")
+
+    with {%User{} = user} <- Accounts.get_by(token: token) do
+      conn |> render("user.json", user: user)
+    end
+
   end
 
   def update(conn, %{"id" => id, "user" => user_params}) do

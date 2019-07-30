@@ -3,7 +3,7 @@ defmodule Camping.Repo.Migrations.AddTokenToUsers do
 
   def change do
     alter table(:users) do
-      add(:token, :string)
+      add(:token, :text)
     end
   end
 end
