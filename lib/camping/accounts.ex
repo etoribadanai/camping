@@ -7,6 +7,7 @@ defmodule Camping.Accounts do
   alias Camping.Repo
 
   alias Camping.Accounts.Schemas.Customer
+  alias Camping.Accounts.Schemas.User
   alias Camping.Guardian
   import Comeonin.Bcrypt, only: [checkpw: 2, dummy_checkpw: 0]
 
@@ -24,20 +25,49 @@ defmodule Camping.Accounts do
   end
 
   @doc """
+  Returns the list of users.
+
+  ## Examples
+
+      iex> list_users()
+      [%User{}, ...]
+
+  """
+  def list_users do
+    Repo.all(User)
+  end
+
+  @doc """
   Gets a single customer.
 
   Raises `Ecto.NoResultsError` if the customer does not exist.
 
   ## Examples
 
-      iex> get_customer!(123)
+      iex> get_customer(123)
       %Customer{}
 
-      iex> get_customer!(456)
+      iex> get_customer(456)
+      nil
+
+  """
+  def get_customer(id), do: Repo.get(Customer, id)
+
+  @doc """
+  Gets a single user.
+
+  Raises `Ecto.NoResultsError` if the user does not exist.
+
+  ## Examples
+
+      iex> get_user!(123)
+      %User{}
+
+      iex> get_user!(456)
       ** (Ecto.NoResultsError)
 
   """
-  def get_customer!(id), do: Repo.get!(Customer, id)
+  def get_user!(id), do: Repo.get!(User, id)
 
   @doc """
   Gets a single customer based on passed fields
@@ -56,9 +86,9 @@ defmodule Camping.Accounts do
   def get_by(fields), do: Repo.get_by(Customer, fields)
 
   def token_sign_in(email, password) do
-    with {:ok, customer} <- email_password_auth(email, password),
-         {:ok, token, _claims} = Guardian.encode_and_sign(customer) do
-        #  {:ok, _} <- store_token(customer, token) do
+    with {:ok, user} <- email_password_auth(email, password),
+         {:ok, token, _claims} = Guardian.encode_and_sign(user),
+         {:ok, _} <- store_token(user, token) do
       {:ok, token}
     else
       _ -> {:error, :unauthorized}
@@ -66,24 +96,25 @@ defmodule Camping.Accounts do
   end
 
   defp email_password_auth(email, password) when is_binary(email) and is_binary(password) do
-    with {:ok, customer} <- get_by_email(email),
-         do: verify_password(password, customer)
+    with {:ok, user} <- get_by_email(email) do
+      verify_password(password, user)
+    end
   end
 
   defp get_by_email(email) when is_binary(email) do
-    case Repo.get_by(Customer, email: email) do
+    case Repo.get_by(User, email: email) do
       nil ->
         dummy_checkpw()
         {:error, "Login error."}
 
-      customer ->
-        {:ok, customer}
+      user ->
+        {:ok, user}
     end
   end
 
-  defp verify_password(password, %Customer{} = customer) when is_binary(password) do
-    if checkpw(password, customer.password_hash) do
-      {:ok, customer}
+  defp verify_password(password, %User{} = user) when is_binary(password) do
+    if checkpw(password, user.password_hash) do
+      {:ok, user}
     else
       {:error, :invalid_password}
     end
@@ -98,11 +129,11 @@ defmodule Camping.Accounts do
       {:ok, %Customer{}}
 
   """
-  # def store_token(%User{} = user, token) do
-  #   user
-  #   |> Ecto.Changeset.change(%{token: token})
-  #   |> Repo.update()
-  # end
+  def store_token(%User{} = user, token) do
+    user
+    |> Ecto.Changeset.change(%{token: token})
+    |> Repo.update()
+  end
 
   @doc """
   Creates a customer.
@@ -119,6 +150,25 @@ defmodule Camping.Accounts do
   def create_customer(attrs \\ %{}) do
     %Customer{}
     |> Customer.changeset(attrs)
+    |> Repo.insert()
+  end
+
+   @doc """
+  Creates a customer.
+
+  ## Examples
+
+      iex> create_customer(%{field: value})
+      {:ok, %Customer{}}
+
+      iex> create_customer(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_user(customer_id, attrs \\ %{}) do
+    attrs = Map.put(attrs, "customer_id", customer_id)
+    %User{}
+    |> User.changeset(attrs)
     |> Repo.insert()
   end
 
