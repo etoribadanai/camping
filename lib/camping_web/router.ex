@@ -28,6 +28,7 @@ defmodule CampingWeb.Router do
   scope "/api/v1", CampingWeb do
     pipe_through [:api]
     post "/create", CustomerController, :create
+    post "/social/create", SocialController, :create
     post "/sign_in", UserController, :sign_in
     resources("/products", ProductController)
   end

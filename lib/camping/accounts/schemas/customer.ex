@@ -14,7 +14,7 @@ defmodule Camping.Accounts.Schemas.Customer do
   def changeset(%Customer{} = customer, attrs) do
     customer
     |> cast(attrs, [:email, :name])
-    |> validate_required([:name, :email])
+    |> validate_required([:email])
     |> validate_format(:email, ~r/@/)
     |> unique_constraint(:email)
   end

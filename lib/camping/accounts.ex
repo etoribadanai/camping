@@ -8,6 +8,7 @@ defmodule Camping.Accounts do
 
   alias Camping.Accounts.Schemas.Customer
   alias Camping.Accounts.Schemas.User
+  alias Camping.Accounts.Schemas.Social
   alias Camping.Guardian
   import Comeonin.Bcrypt, only: [checkpw: 2, dummy_checkpw: 0]
 
@@ -125,8 +126,8 @@ defmodule Camping.Accounts do
 
   ## Examples
 
-      iex> store_token(customer, token)
-      {:ok, %Customer{}}
+      iex> store_token(user, token)
+      {:ok, %User{}}
 
   """
   def store_token(%User{} = user, token) do
@@ -153,15 +154,15 @@ defmodule Camping.Accounts do
     |> Repo.insert()
   end
 
-   @doc """
-  Creates a customer.
+  @doc """
+  Creates a user.
 
   ## Examples
 
-      iex> create_customer(%{field: value})
-      {:ok, %Customer{}}
+      iex> create_user(%{field: value})
+      {:ok, %User{}}
 
-      iex> create_customer(%{field: bad_value})
+      iex> create_user(%{field: bad_value})
       {:error, %Ecto.Changeset{}}
 
   """
@@ -169,6 +170,25 @@ defmodule Camping.Accounts do
     attrs = Map.put(attrs, "customer_id", customer_id)
     %User{}
     |> User.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  @doc """
+  Creates a social login.
+
+  ## Examples
+
+      iex> create_social_login(%{field: value})
+      {:ok, %User{}}
+
+      iex> create_social_login(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_social_login(customer_id, attrs \\ %{}) do
+    attrs = Map.put(attrs, "customer_id", customer_id)
+    %Social{}
+    |> Social.changeset(attrs)
     |> Repo.insert()
   end
 
