@@ -3,7 +3,7 @@ defmodule CampingWeb.OrderController do
 
   alias Camping.Orders
   alias Camping.Orders.Order.HandleCreate
-  alias Camping.Accounts.Schemas.User
+  alias Camping.Accounts.Schemas.Customer
   alias Camping.Guardian
 
   action_fallback CampingWeb.FallbackController
@@ -14,9 +14,9 @@ defmodule CampingWeb.OrderController do
   end
 
   def create(conn, params) do
-    with %User{} = user <- Guardian.Plug.current_resource(conn) do
+    with %Customer{} = customer <- Guardian.Plug.current_resource(conn) do
       params
-      |> HandleCreate.create(user.id)
+      |> HandleCreate.create(customer.id)
       |> handle_create_order(conn)
     end
   end

@@ -6,9 +6,24 @@ defmodule Camping.Accounts do
   import Ecto.Query, warn: false
   alias Camping.Repo
 
+  alias Camping.Accounts.Schemas.Customer
   alias Camping.Accounts.Schemas.User
+  alias Camping.Accounts.Schemas.Social
   alias Camping.Guardian
   import Comeonin.Bcrypt, only: [checkpw: 2, dummy_checkpw: 0]
+
+  @doc """
+  Returns the list of customers.
+
+  ## Examples
+
+      iex> list_customers()
+      [%Customer{}, ...]
+
+  """
+  def list_customers do
+    Repo.all(Customer)
+  end
 
   @doc """
   Returns the list of users.
@@ -24,9 +39,25 @@ defmodule Camping.Accounts do
   end
 
   @doc """
+  Gets a single customer.
+
+  Raises `Ecto.NoResultsError` if the customer does not exist.
+
+  ## Examples
+
+      iex> get_customer(123)
+      %Customer{}
+
+      iex> get_customer(456)
+      nil
+
+  """
+  def get_customer(id), do: Repo.get(Customer, id)
+
+  @doc """
   Gets a single user.
 
-  Raises `Ecto.NoResultsError` if the User does not exist.
+  Raises `Ecto.NoResultsError` if the user does not exist.
 
   ## Examples
 
@@ -40,9 +71,9 @@ defmodule Camping.Accounts do
   def get_user!(id), do: Repo.get!(User, id)
 
   @doc """
-  Gets a single user based on passed fields
+  Gets a single customer based on passed fields
 
-  Returns nil when user doesn't exist.
+  Returns nil when customer doesn't exist.
 
   ## Examples
 
@@ -53,7 +84,7 @@ defmodule Camping.Accounts do
       nil
 
   """
-  def get_by(fields), do: Repo.get_by(User, fields)
+  def get_by(fields), do: Repo.get_by(Customer, fields)
 
   def token_sign_in(email, password) do
     with {:ok, user} <- email_password_auth(email, password),
@@ -66,8 +97,9 @@ defmodule Camping.Accounts do
   end
 
   defp email_password_auth(email, password) when is_binary(email) and is_binary(password) do
-    with {:ok, user} <- get_by_email(email),
-         do: verify_password(password, user)
+    with {:ok, user} <- get_by_email(email) do
+      verify_password(password, user)
+    end
   end
 
   defp get_by_email(email) when is_binary(email) do
@@ -90,7 +122,7 @@ defmodule Camping.Accounts do
   end
 
   @doc """
-  Returns an updated user with new JWT stored in DB.
+  Returns an updated customer with new JWT stored in DB.
 
   ## Examples
 
@@ -105,6 +137,24 @@ defmodule Camping.Accounts do
   end
 
   @doc """
+  Creates a customer.
+
+  ## Examples
+
+      iex> create_customer(%{field: value})
+      {:ok, %Customer{}}
+
+      iex> create_customer(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_customer(attrs \\ %{}) do
+    %Customer{}
+    |> Customer.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  @doc """
   Creates a user.
 
   ## Examples
@@ -116,56 +166,76 @@ defmodule Camping.Accounts do
       {:error, %Ecto.Changeset{}}
 
   """
-  def create_user(attrs \\ %{}) do
+  def create_user(customer_id, attrs \\ %{}) do
+    attrs = Map.put(attrs, "customer_id", customer_id)
     %User{}
     |> User.changeset(attrs)
     |> Repo.insert()
   end
 
   @doc """
-  Updates a user.
+  Creates a social login.
 
   ## Examples
 
-      iex> update_user(user, %{field: new_value})
+      iex> create_social_login(%{field: value})
       {:ok, %User{}}
 
-      iex> update_user(user, %{field: bad_value})
+      iex> create_social_login(%{field: bad_value})
       {:error, %Ecto.Changeset{}}
 
   """
-  def update_user(%User{} = user, attrs) do
-    user
-    |> User.changeset(attrs)
+  def create_social_login(customer_id, attrs \\ %{}) do
+    attrs = Map.put(attrs, "customer_id", customer_id)
+    %Social{}
+    |> Social.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  @doc """
+  Updates a customer.
+
+  ## Examples
+
+      iex> update_customer(customer, %{field: new_value})
+      {:ok, %Customer{}}
+
+      iex> update_customer(customer, %{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def update_customer(%Customer{} = customer, attrs) do
+    customer
+    |> Customer.changeset(attrs)
     |> Repo.update()
   end
 
   @doc """
-  Deletes a User.
+  Deletes a customer.
 
   ## Examples
 
-      iex> delete_user(user)
-      {:ok, %User{}}
+      iex> delete_customer(customer)
+      {:ok, %Customer{}}
 
-      iex> delete_user(user)
+      iex> delete_customer(customer)
       {:error, %Ecto.Changeset{}}
 
   """
-  def delete_user(%User{} = user) do
-    Repo.delete(user)
+  def delete_customer(%Customer{} = customer) do
+    Repo.delete(customer)
   end
 
   @doc """
-  Returns an `%Ecto.Changeset{}` for tracking user changes.
+  Returns an `%Ecto.Changeset{}` for tracking customer changes.
 
   ## Examples
 
-      iex> change_user(user)
-      %Ecto.Changeset{source: %User{}}
+      iex> change_customer(customer)
+      %Ecto.Changeset{source: %Customer{}}
 
   """
-  def change_user(%User{} = user) do
-    User.changeset(user, %{})
+  def change_customer(%Customer{} = customer) do
+    Customer.changeset(customer, %{})
   end
 end

@@ -1,5 +1,3 @@
-require IEx
-
 defmodule Camping.Orders.Order.HandleCreate do
   alias Camping.Orders
   alias Camping.Orders.Detail.HandleCreate

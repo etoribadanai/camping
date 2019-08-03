@@ -4,7 +4,7 @@ defmodule Camping.Repo.Migrations.CreateOrdersTable do
   def change do
     create table(:orders) do
       add(:obs, :string)
-      add(:user_id, references(:users, on_delete: :nothing))
+      add(:user_id, references(:customers, on_delete: :nothing))
 
       timestamps()
     end
