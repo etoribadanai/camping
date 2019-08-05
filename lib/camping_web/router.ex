@@ -15,7 +15,8 @@ defmodule CampingWeb.Router do
   end
 
   pipeline :jwt_authenticated do
-    plug Guardian.AuthPipeline
+    # plug Guardian.AuthPipeline
+    plug Camping.Context
   end
 
   scope "/", CampingWeb do
