@@ -85,6 +85,7 @@ defmodule Camping.Accounts do
 
   """
   def get_by(fields), do: Repo.get_by(Customer, fields)
+  def get_social_by(fields), do: Repo.get_by(Social, fields)
 
   def token_sign_in(email, password) do
     with {:ok, user} <- email_password_auth(email, password),
@@ -185,8 +186,8 @@ defmodule Camping.Accounts do
       {:error, %Ecto.Changeset{}}
 
   """
-  def create_social_login(customer_id, attrs \\ %{}) do
-    attrs = Map.put(attrs, "customer_id", customer_id)
+  def create_social_login(attrs \\ %{}) do
+    # attrs = Map.put(attrs, "customer_id", customer_id)
     %Social{}
     |> Social.changeset(attrs)
     |> Repo.insert()
@@ -207,6 +208,24 @@ defmodule Camping.Accounts do
   def update_customer(%Customer{} = customer, attrs) do
     customer
     |> Customer.changeset(attrs)
+    |> Repo.update()
+  end
+
+  @doc """
+  Updates a Social Login.
+
+  ## Examples
+
+      iex> update_social_login(social, %{field: new_value})
+      {:ok, %Social{}}
+
+      iex> update_social_login(social, %{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def update_social_login(%Social{} = social, attrs) do
+    social
+    |> Social.changeset(attrs)
     |> Repo.update()
   end
 
