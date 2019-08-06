@@ -1,11 +1,9 @@
 require IEx
+
 defmodule CampingWeb.SocialController do
   use CampingWeb, :controller
 
-  alias Camping.Accounts
   alias Camping.Accounts.Schemas.Social
-  alias Camping.Accounts.Schemas.Customer
-  alias Camping.Guardian
   alias Camping.Accounts.Social.HandleCreate
 
   action_fallback CampingWeb.FallbackController
@@ -24,7 +22,7 @@ defmodule CampingWeb.SocialController do
       err ->
         conn
         |> put_status(:bad_request)
-        |> json(%{data: %{message: "Something went wrong", details: err}})
+        |> json(%{data: %{message: "Something went wrong to create user #{params["email"]}"}})
     end
   end
 end
