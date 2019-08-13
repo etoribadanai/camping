@@ -4,7 +4,7 @@ defmodule Camping.Orders.Schemas.Order do
 
   schema "orders" do
     field :obs, :string, size: 1000
-    field :user_id, :id
+    field :customer_id, :id
 
     timestamps(type: :utc_datetime)
   end
@@ -14,8 +14,8 @@ defmodule Camping.Orders.Schemas.Order do
     order
     |> cast(attrs, [
       :obs,
-      :user_id
+      :customer_id
     ])
-    |> validate_required([:user_id])
+    |> validate_required([:customer_id])
   end
 end

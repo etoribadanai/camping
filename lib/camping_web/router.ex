@@ -32,6 +32,7 @@ defmodule CampingWeb.Router do
     post "/social/create", SocialController, :create
     post "/sign_in", UserController, :sign_in
     resources("/products", ProductController)
+    resources("/trails", TrailController, only: [:index, :show])
   end
 
   scope "/api/v1", CampingWeb do

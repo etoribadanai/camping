@@ -4,7 +4,9 @@ defmodule Camping.Repo.Migrations.CreateProducts do
   def change do
     create table(:products) do
       add(:code, :integer)
+      add(:name, :string)
       add(:description, :string)
+      add(:category, :string)
       add(:brand, :string)
       add(:obs, :string)
       add(:stock, :integer)
@@ -15,6 +17,6 @@ defmodule Camping.Repo.Migrations.CreateProducts do
     end
 
     create index(:products, [:code])
-    create index(:products, [:description])
+    create index(:products, [:category])
   end
 end
