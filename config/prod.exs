@@ -20,5 +20,5 @@ config :camping, Camping.Repo,
   username: "postgres",
   password: "postgres",
   database: "camping_prod",
-  hostname: "172.17.0.3",
+  hostname: "host.docker.internal",
   pool_size: 20
