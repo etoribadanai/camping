@@ -19,6 +19,6 @@ config :logger, level: :info
 config :camping, Camping.Repo,
   username: "postgres",
   password: "postgres",
-  database: "camping_dev",
-  hostname: "localhost",
+  database: "camping_prod",
+  hostname: "host.docker.internal",
   pool_size: 20
