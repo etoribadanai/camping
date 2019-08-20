@@ -1,0 +1,6 @@
+.git*
+Dockerfile
+*.log
+README.md
+.elixir_ls
+_builds
