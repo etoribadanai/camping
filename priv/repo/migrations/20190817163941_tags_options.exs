@@ -4,7 +4,7 @@ defmodule Camping.Repo.Migrations.TagsOptions do
   def change do
     create table(:tag_options) do
       add(:tag_id, references(:tags, on_delete: :nothing), null: false)
-      add :values, :string
+      add :value, :string
 
       timestamps()
     end

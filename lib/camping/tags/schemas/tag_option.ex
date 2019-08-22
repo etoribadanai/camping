@@ -3,7 +3,7 @@ defmodule Camping.Tags.Schemas.TagOption do
   import Ecto.Changeset
 
   schema "tag_options" do
-    field :values, :string
+    field :value, :string
     field :tag_id, :id
 
     timestamps()
@@ -12,7 +12,7 @@ defmodule Camping.Tags.Schemas.TagOption do
   @doc false
   def changeset(tag_option, attrs) do
     tag_option
-    |> cast(attrs, [:values, :tag_id])
-    |> validate_required([:values, :tag_id])
+    |> cast(attrs, [:value, :tag_id])
+    |> validate_required([:value, :tag_id])
   end
 end
