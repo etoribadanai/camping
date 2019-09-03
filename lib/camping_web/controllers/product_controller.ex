@@ -8,6 +8,12 @@ defmodule CampingWeb.ProductController do
     render(conn, "index.json", products: products)
   end
 
+  def create(conn, %{"product_tag_option" => params}) do
+    with {:ok, product_tag_option} <- Products.create_product_tag_option(params) do
+      json(conn, %{message: "Productid: #{product_tag_option.id} created successfully."})
+    end
+  end
+
   def show(conn, %{"id" => id}) do
     product = Products.get_product(id)
     render(conn, "show.json", product: product)

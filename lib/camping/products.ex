@@ -2,6 +2,7 @@ defmodule Camping.Products do
   import Ecto.Query, warn: false
   alias Camping.Repo
   alias Camping.Products.Schemas.Product
+  alias Camping.Products.Schemas.ProductTagOption
 
   @doc """
   Returns the list of products.
@@ -63,5 +64,31 @@ defmodule Camping.Products do
   """
   def delete_product(%Product{} = product) do
     Repo.delete(product)
+  end
+
+  @doc """
+  Creates a product tag option.
+
+  ## Examples
+
+      iex> create_product_tag_option(%{field: value})
+      {:ok, %Product{}}
+
+      iex> create_product_tag_option(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_product_tag_option(attrs \\ %{}) do
+    case Repo.get_by(ProductTagOption,
+           tag_id: attrs["tag_id"],
+           product_id: attrs["product_id"]
+         ) do
+      nil ->
+        ProductTagOption.changeset(%ProductTagOption{}, attrs)
+
+      product_tag_value_db ->
+        ProductTagOption.changeset(product_tag_value_db, attrs)
+    end
+    |> Repo.insert_or_update()
   end
 end
