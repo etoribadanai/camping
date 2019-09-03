@@ -2,6 +2,7 @@ defmodule Camping.Trails do
   import Ecto.Query, warn: false
   alias Camping.Repo
   alias Camping.Trails.Schemas.Trail
+  alias Camping.Trails.Schemas.TrailTagOption
 
   @doc """
   Returns the list of trails.
@@ -63,5 +64,31 @@ defmodule Camping.Trails do
   """
   def delete_trail(%Trail{} = trail) do
     Repo.delete(trail)
+  end
+
+  @doc """
+  Creates a product tag option.
+
+  ## Examples
+
+      iex> create_product_tag_option(%{field: value})
+      {:ok, %Product{}}
+
+      iex> create_product_tag_option(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_trail_tag_option(attrs \\ %{}) do
+    case Repo.get_by(TrailTagOption,
+           tag_id: attrs["tag_id"],
+           trail_id: attrs["trail_id"]
+         ) do
+      nil ->
+        TrailTagOption.changeset(%TrailTagOption{}, attrs)
+
+      trail_tag_value_db ->
+        TrailTagOption.changeset(trail_tag_value_db, attrs)
+    end
+    |> Repo.insert_or_update()
   end
 end
