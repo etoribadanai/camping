@@ -21,7 +21,7 @@ defmodule CampingWeb.CustomerController do
          {:ok, %User{} = user} <- Accounts.create_user(customer.id, params),
          {:ok, token, _claims} <- Guardian.encode_and_sign(user),
          {:ok, _} <- Accounts.store_token(user, token) do
-      conn |> render("jwt.json", jwt: token)
+      json(conn, %{token: token})
     end
   end
 
