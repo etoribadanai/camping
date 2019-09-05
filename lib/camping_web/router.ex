@@ -11,6 +11,9 @@ defmodule CampingWeb.Router do
   end
 
   pipeline :api do
+    plug CORSPlug,
+      origin: ["*"]
+
     plug(:accepts, ["json"])
   end
 
@@ -29,8 +32,11 @@ defmodule CampingWeb.Router do
   scope "/api/v1", CampingWeb do
     pipe_through([:api])
     post("/create", CustomerController, :create)
+    options("/create", CustomerController, :create)
     post("/social/create", SocialController, :create)
+    options("/social/create", SocialController, :create)
     post("/sign_in", UserController, :sign_in)
+    options("/sign_in", UserController, :sign_in)
     resources("/products", ProductController)
     resources("/tags", TagController, only: [:index, :create])
     resources("/trails", TrailController, only: [:index, :show])
