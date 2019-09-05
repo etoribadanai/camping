@@ -14,6 +14,8 @@ defmodule CampingWeb.Router do
     plug CORSPlug,
       origin: ["*"]
 
+    plug(:fetch_session)
+    plug(:fetch_flash)
     plug(:accepts, ["json"])
   end
 
@@ -31,12 +33,12 @@ defmodule CampingWeb.Router do
   # Other scopes may use custom stacks.
   scope "/api/v1", CampingWeb do
     pipe_through([:api])
-    post("/create", CustomerController, :create)
-    options("/create", CustomerController, :create)
+    post("/user/create", UserController, :create)
+    options("/user/create", UserController, :create)
     post("/social/create", SocialController, :create)
     options("/social/create", SocialController, :create)
-    post("/sign_in", UserController, :sign_in)
-    options("/sign_in", UserController, :sign_in)
+    post("/user/sign_in", UserController, :sign_in)
+    options("/user/sign_in", UserController, :sign_in)
     resources("/products", ProductController)
     resources("/tags", TagController, only: [:index, :create])
     resources("/trails", TrailController, only: [:index, :show])

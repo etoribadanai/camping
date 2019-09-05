@@ -1,12 +1,8 @@
-require IEx
-
 defmodule CampingWeb.CustomerController do
   use CampingWeb, :controller
 
   alias Camping.Accounts
   alias Camping.Accounts.Schemas.Customer
-  alias Camping.Accounts.Schemas.User
-  alias Camping.Guardian
 
   action_fallback CampingWeb.FallbackController
 
@@ -14,15 +10,6 @@ defmodule CampingWeb.CustomerController do
     # conn.assigns.signed_user.customer_id
     customers = Accounts.list_customers()
     render(conn, "index.json", customers: customers)
-  end
-
-  def create(conn, params) do
-    with {:ok, %Customer{} = customer} <- Accounts.create_customer(params),
-         {:ok, %User{} = user} <- Accounts.create_user(customer.id, params),
-         {:ok, token, _claims} <- Guardian.encode_and_sign(user),
-         {:ok, _} <- Accounts.store_token(user, token) do
-      json(conn, %{token: token})
-    end
   end
 
   def show(conn, %{"id" => id}) do

@@ -4,12 +4,23 @@ defmodule CampingWeb.UserController do
   alias Camping.Accounts
   alias Camping.Accounts.Schemas.User
   alias Camping.Guardian
+  alias Camping.Accounts.Schemas.Customer
+  alias Camping.Accounts.Schemas.User
 
   action_fallback CampingWeb.FallbackController
 
   def index(conn, _params) do
     users = Accounts.list_users()
     render(conn, "index.json", users: users)
+  end
+
+  def create(conn, params) do
+    with {:ok, %Customer{} = customer} <- Accounts.create_customer(params),
+         {:ok, %User{} = user} <- Accounts.create_user(customer.id, params),
+         {:ok, token, _claims} <- Guardian.encode_and_sign(user),
+         {:ok, _} <- Accounts.store_token(user, token) do
+      json(conn, %{token: token})
+    end
   end
 
   def sign_in(conn, %{"email" => email, "password" => password}) do
