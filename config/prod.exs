@@ -17,8 +17,8 @@ config :logger, level: :info
 
 # Configure your database
 config :camping, Camping.Repo,
-  username: "postgres",
-  password: "postgres",
+  username: "etori",
+  password: "San240297",
   database: "camping_prod",
-  hostname: "host.docker.internal",
+  hostname: "aa490tn3jlo0ow.c0kjdlsnhsft.sa-east-1.rds.amazonaws.com",
   pool_size: 20
