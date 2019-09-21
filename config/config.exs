@@ -12,6 +12,7 @@ config :camping,
 
 # Configures the endpoint
 config :camping, CampingWeb.Endpoint,
+  url: [host: "localhost"],
   secret_key_base: "/tAJrJDQajHg26ax/lkZBa0+17L6RCsoHxPlImALhS/r7UCGMd9XOtvT97s2/M8R",
   render_errors: [view: CampingWeb.ErrorView, accepts: ~w(html json)],
   pubsub: [name: Camping.PubSub, adapter: Phoenix.PubSub.PG2]
