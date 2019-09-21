@@ -21,7 +21,7 @@ config :logger, level: :info
 # Configure your database
 config :camping, Camping.Repo,
   username: "etori",
-  password: "San240297",
+  password: "tcc240297",
   database: "camping_prod",
   hostname: "aa490tn3jlo0ow.c0kjdlsnhsft.sa-east-1.rds.amazonaws.com",
   pool_size: 20
