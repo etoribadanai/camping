@@ -9,6 +9,7 @@ defmodule Camping.Accounts.Schemas.Social do
     field :image, :string
     field :provider, :string
     field :token, :string
+    field :name, :string
 
     timestamps()
   end
@@ -16,7 +17,7 @@ defmodule Camping.Accounts.Schemas.Social do
   @doc false
   def changeset(social, attrs) do
     social
-    |> cast(attrs, [:email, :customer_id, :uid, :image, :provider, :token])
+    |> cast(attrs, [:email, :customer_id, :uid, :image, :provider, :token, :name])
     |> validate_required([:customer_id, :provider, :token])
     |> unique_constraint(:email, downcase: true)
   end
