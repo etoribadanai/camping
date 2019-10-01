@@ -14,6 +14,7 @@ defmodule CampingWeb.ProductView do
     %{
       id: product.id,
       code: product.code,
+      name: product.name,
       description: product.description,
       stock: product.stock,
       image: product.image,
