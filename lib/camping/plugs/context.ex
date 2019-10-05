@@ -1,6 +1,4 @@
-require IEx
-
-defmodule Camping.Context do
+defmodule Camping.Plugs.Context do
   @behaviour Plug
 
   import Plug.Conn

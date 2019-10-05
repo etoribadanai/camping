@@ -13,8 +13,40 @@ defmodule Camping.Products do
       [%Product{}, ...]
 
   """
-  def list_products() do
-    Repo.all(Product)
+  def list_products(filters) do
+    Product
+    |> filter(filters)
+    |> group()
+    |> Repo.all()
+  end
+
+  defp filter(query, filters) do
+    Enum.reduce(filters, query, fn {key, value}, query ->
+      value = String.trim(value)
+
+      case String.downcase(key) do
+        "search" ->
+          build_search_query(query, Integer.parse(value), value)
+
+        _ ->
+          query
+      end
+    end)
+  end
+
+  defp build_search_query(query, {value, _}, _non_used) do
+    query
+    |> where([p], p.code == ^value)
+  end
+
+  defp build_search_query(query, :error, value) do
+    query
+    |> where([p], ilike(p.description, ^"%#{value}%"))
+  end
+
+  defp group(query) do
+    query
+    |> group_by([p], [p.id, p.code, p.description, p.image, p.stock])
   end
 
   @doc """

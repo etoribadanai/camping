@@ -20,8 +20,7 @@ defmodule CampingWeb.Router do
   end
 
   pipeline :jwt_authenticated do
-    # plug Guardian.AuthPipeline
-    plug(Camping.Context)
+    plug(Camping.Plugs.Context)
   end
 
   scope "/", CampingWeb do
@@ -34,25 +33,51 @@ defmodule CampingWeb.Router do
   # Other scopes may use custom stacks.
   scope "/api/v1", CampingWeb do
     pipe_through([:api])
-    post("/user/create", UserController, :create)
-    options("/user/create", UserController, :create)
-    post("/social/create", SocialController, :create)
-    options("/social/create", SocialController, :create)
-    post("/user/sign_in", UserController, :sign_in)
-    options("/user/sign_in", UserController, :sign_in)
-    resources("/products", ProductController)
-    resources("/tags", TagController, only: [:index, :create])
-    resources("/trails", TrailController, only: [:index, :show])
+
+    scope "/user" do
+      post("/create", UserController, :create)
+      options("/create", UserController, :create)
+      post("/sign_in", UserController, :sign_in)
+      options("/sign_in", UserController, :sign_in)
+    end
+
+    scope "/social" do
+      post("/create", SocialController, :create)
+      options("/create", SocialController, :create)
+    end
+
+    scope "/tags" do
+      resources("/", TagController)
+      options("/", TagController, only: [:index, :show])
+    end
+
+    scope "/trails" do
+      resources("/", TrailController)
+      options("/", TrailController, only: [:index, :show])
+    end
   end
 
   scope "/api/v1", CampingWeb do
     pipe_through([:api, :jwt_authenticated])
 
-    resources("/orders", OrderController)
-    get("/customers", CustomerController, :index)
-    get("/customers/:id", CustomerController, :show)
+    scope "/products" do
+      resources("/", ProductController)
+      options("/", ProductController, only: [:index, :show])
+    end
 
-    get("/users", UserController, :index)
-    get("/users/:id", UserController, :show)
+    scope "/orders" do
+      resources("/", OrderController)
+      options("/", OrderController, only: [:index, :create, :show])
+    end
+
+    scope "/customers" do
+      resources("/", CustomerController)
+      options("/", CustomerController, only: [:index, :show])
+    end
+
+    scope "/users" do
+      resources("/", UserController)
+      options("/", UserController, only: [:index, :show])
+    end
   end
 end

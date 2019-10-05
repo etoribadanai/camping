@@ -7,7 +7,6 @@ defmodule CampingWeb.CustomerController do
   action_fallback CampingWeb.FallbackController
 
   def index(conn, _params) do
-    # conn.assigns.signed_user.customer_id
     customers = Accounts.list_customers()
     render(conn, "index.json", customers: customers)
   end

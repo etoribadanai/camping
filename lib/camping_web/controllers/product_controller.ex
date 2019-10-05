@@ -1,10 +1,15 @@
 defmodule CampingWeb.ProductController do
   use CampingWeb, :controller
 
+  import Camping.Plugs.RequestParams
+  plug :valid_filters, ~w(search) when action in [:index]
+
   alias Camping.Products
 
   def index(conn, _params) do
-    products = Products.list_products()
+    filters = conn.assigns.filters
+
+    products = Products.list_products(filters)
     render(conn, "index.json", products: products)
   end
 
