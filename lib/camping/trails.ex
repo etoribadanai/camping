@@ -13,8 +13,35 @@ defmodule Camping.Trails do
       [%Trail{}, ...]
 
   """
-  def list_trails() do
-    Repo.all(Trail)
+  def list_trails(filters) do
+    Trail
+    |> filter(filters)
+    |> group()
+    |> Repo.all()
+  end
+
+  defp filter(query, filters) do
+    Enum.reduce(filters, query, fn {key, value}, query ->
+      value = String.trim(value)
+
+      case String.downcase(key) do
+        "search" ->
+          build_search_query(query, value)
+
+        _ ->
+          query
+      end
+    end)
+  end
+
+  defp build_search_query(query, value) do
+    query
+    |> where([t], ilike(t.description, ^"%#{value}%"))
+  end
+
+  defp group(query) do
+    query
+    |> group_by([t], [t.id, t.state, t.city])
   end
 
   @doc """

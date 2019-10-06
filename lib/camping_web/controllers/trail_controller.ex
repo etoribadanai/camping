@@ -1,10 +1,15 @@
 defmodule CampingWeb.TrailController do
   use CampingWeb, :controller
 
+  import Camping.Plugs.RequestParams
+  plug :valid_filters, ~w(search) when action in [:index]
+
   alias Camping.Trails
 
   def index(conn, _params) do
-    trails = Trails.list_trails()
+    filters = conn.assigns.filters
+
+    trails = Trails.list_trails(filters)
     render(conn, "index.json", trails: trails)
   end
 
