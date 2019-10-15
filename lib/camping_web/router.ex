@@ -55,6 +55,11 @@ defmodule CampingWeb.Router do
       resources("/", TrailController)
       options("/", TrailController, only: [:index, :show])
     end
+
+    scope "/questions" do
+      resources("/", QuestionController)
+      options("/", QuestionController, only: [:index, :show])
+    end
   end
 
   scope "/api/v1", CampingWeb do
