@@ -1,10 +1,10 @@
-defmodule Camping.Questions do
+defmodule Camping.Quiz do
   @moduledoc """
   The Questions context.
   """
   import Ecto.Query, warn: false
   alias Camping.Repo
-  alias Camping.Questions.Schemas.Question
+  alias Camping.Quiz.Schemas.Question
 
   @doc """
   Returns the list of questions.
@@ -17,6 +17,21 @@ defmodule Camping.Questions do
   """
   def list_question do
     Repo.all(Question)
+  end
+
+  @doc """
+  Returns the list of questions with options.
+
+  ## Examples
+
+      iex> question_with_options()
+      [%Question{}, ...]
+
+  """
+  def question_with_options do
+    Question
+    |> preload(:options)
+    |> Repo.all()
   end
 
   @doc """

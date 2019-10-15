@@ -1,4 +1,4 @@
-defmodule Camping.Questions.Schemas.Question do
+defmodule Camping.Quiz.Schemas.Question do
   use Ecto.Schema
   import Ecto.Changeset
 
@@ -7,6 +7,7 @@ defmodule Camping.Questions.Schemas.Question do
     field :question_desc, :string
     field :required, :boolean
 
+    has_many(:options, Camping.Quiz.Schemas.Option)
     timestamps(type: :utc_datetime)
   end
 
