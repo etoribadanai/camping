@@ -5,6 +5,7 @@ defmodule Camping.Quiz do
   import Ecto.Query, warn: false
   alias Camping.Repo
   alias Camping.Quiz.Schemas.Question
+  alias Camping.Quiz.Schemas.Option
 
   @doc """
   Returns the list of questions.
@@ -49,4 +50,20 @@ defmodule Camping.Quiz do
 
   """
   def get_question(id), do: Repo.get(Question, id)
+
+  @doc """
+  Gets a single option.
+
+  Raises `Ecto.NoResultsError` if the Option does not exist.
+
+  ## Examples
+
+      iex> get_option(123)
+      %Option{}
+
+      iex> get_option(456)
+      ** nil
+
+  """
+  def get_option(id), do: Repo.get(Option, id)
 end

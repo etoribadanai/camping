@@ -78,6 +78,8 @@ defmodule CampingWeb.Router do
     scope "/customers" do
       resources("/", CustomerController)
       options("/", CustomerController, only: [:index, :show])
+      post("/answer", CustomerAnswerController, :create_or_update)
+      options("/answer", CustomerAnswerController, :create_or_update)
     end
 
     scope "/users" do
