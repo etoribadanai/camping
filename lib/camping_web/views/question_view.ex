@@ -1,5 +1,3 @@
-require IEx
-
 defmodule CampingWeb.QuestionView do
   use CampingWeb, :view
   alias CampingWeb.QuestionView

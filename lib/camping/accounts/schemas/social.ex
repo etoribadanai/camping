@@ -8,7 +8,7 @@ defmodule Camping.Accounts.Schemas.Social do
     field :uid, :string
     field :image, :string
     field :provider, :string
-    field :token, :string
+    field :token, :string, size: 1000
     field :name, :string
 
     timestamps()

@@ -6,7 +6,7 @@ defmodule Camping.Accounts.Schemas.User do
     field :email, :string
     field :password, :string, virtual: true
     field :password_hash, :string
-    field :token, :string
+    field :token, :string, size: 1000
     field :customer_id, :integer
 
     timestamps()

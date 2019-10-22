@@ -25,25 +25,29 @@ defmodule Camping.Plugs.Context do
   end
 
   defp build_context(conn) do
-    with ["Bearer " <> token] <- get_req_header(conn, "authorization"),
-         {:ok, current_user} <- authorize(token) do
+    get_req_header(conn, "authorization")
+    |> check_kind_of_authorization()
+  end
+
+  defp check_kind_of_authorization(["Bearer " <> token]) do
+    with {:ok, current_user} <- authorize(token, User) do
       {:ok, %{current_user: current_user, token: token}}
     end
   end
 
-  defp authorize(token, schema \\ User) do
+  defp check_kind_of_authorization([token]) do
+    with {:ok, current_user} <- authorize(token, Social) do
+      {:ok, %{current_user: current_user, token: token}}
+    end
+  end
+
+  defp authorize(token, schema) do
     schema
     |> where(token: ^token)
     |> Repo.one()
     |> authorized_user(schema, token)
   end
 
-  defp authorized_user(_user = nil, schema, token) do
-    case schema do
-      User -> authorize(token, Social)
-      Social -> {:error, "Invalid authorization token"}
-    end
-  end
-
+  defp authorized_user(_user = nil, _schema, _token), do: {:error, "Invalid authorization token"}
   defp authorized_user(user, _, _), do: {:ok, user}
 end
