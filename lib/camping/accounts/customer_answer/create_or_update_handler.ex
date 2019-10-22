@@ -9,7 +9,8 @@ defmodule Camping.Accounts.CustomerAnswer.CreateOrUpdateHandler do
           "selected" => selected
         }
       ) do
-    CustomerAnswers.create_or_update(params)
+    params
+    |> CustomerAnswers.create_or_update()
     |> handle_response()
   end
 

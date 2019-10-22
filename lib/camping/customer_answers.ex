@@ -17,7 +17,11 @@ defmodule Camping.CustomerAnswers do
 
   """
   def create_or_update(params) do
-    case Repo.get_by(CustomerAnswer, params) do
+    case Repo.get_by(CustomerAnswer,
+           customer_id: params["customer_id"],
+           question_id: params["question_id"],
+           selected: params["selected"]
+         ) do
       nil -> CustomerAnswer.changeset(%CustomerAnswer{}, params)
       customer_answer_db -> CustomerAnswer.changeset(customer_answer_db, params)
     end
