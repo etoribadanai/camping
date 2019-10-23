@@ -91,7 +91,7 @@ defmodule Camping.Accounts do
     with {:ok, user} <- email_password_auth(email, password),
          {:ok, token, _claims} = Guardian.encode_and_sign(user),
          {:ok, _} <- store_token(user, token) do
-      {:ok, token}
+      {:ok, token, get_customer(user.customer_id).name}
     else
       _ -> {:error, :unauthorized}
     end
@@ -169,6 +169,7 @@ defmodule Camping.Accounts do
   """
   def create_user(customer_id, attrs \\ %{}) do
     attrs = Map.put(attrs, "customer_id", customer_id)
+
     %User{}
     |> User.changeset(attrs)
     |> Repo.insert()

@@ -25,11 +25,8 @@ defmodule CampingWeb.UserController do
 
   def sign_in(conn, %{"email" => email, "password" => password}) do
     case Accounts.token_sign_in(email, password) do
-      {:ok, token} ->
-        conn |> render("jwt.json", jwt: token)
-
-      _ ->
-        {:error, :unauthorized}
+      {:ok, token, name} -> json(conn, %{data: %{jwt: token, name: name}})
+      _ -> {:error, :unauthorized}
     end
   end
 
