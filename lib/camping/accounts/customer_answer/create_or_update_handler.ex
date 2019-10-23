@@ -3,10 +3,10 @@ defmodule Camping.Accounts.CustomerAnswer.CreateOrUpdateHandler do
 
   def execute(
         params = %{
-          "customer_id" => customer_id,
-          "question_id" => question_id,
-          "option_id" => option_id,
-          "selected" => selected
+          "customer_id" => _customer_id,
+          "question_id" => _question_id,
+          "option_id" => _option_id,
+          "selected" => _selected
         }
       ) do
     params
