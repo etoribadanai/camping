@@ -13,6 +13,7 @@ defmodule Camping.Trails.Schemas.Trail do
     field :start, :string
     field :finish, :string
     field :nearby, :string
+    field :description, :string, size: 1000
 
     timestamps(type: :utc_datetime)
   end
@@ -30,7 +31,8 @@ defmodule Camping.Trails.Schemas.Trail do
       :distance_from_capital,
       :start,
       :finish,
-      :nearby
+      :nearby,
+      :description
     ])
   end
 end

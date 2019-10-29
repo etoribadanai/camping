@@ -22,7 +22,8 @@ defmodule CampingWeb.TrailView do
       distance_from_capital: trail.distance_from_capital,
       start: trail.start,
       finish: trail.finish,
-      nearby: trail.nearby
+      nearby: trail.nearby,
+      description: trail.description
     }
   end
 end
