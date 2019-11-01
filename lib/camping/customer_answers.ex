@@ -6,6 +6,7 @@ defmodule Camping.CustomerAnswers do
   import Ecto.Query, warn: false
   alias Camping.Repo
   alias Camping.Accounts.Schemas.CustomerAnswer
+  alias Camping.Quiz.Schemas.Option
 
   @doc """
   Create or update customer answer in db
@@ -26,5 +27,15 @@ defmodule Camping.CustomerAnswers do
       customer_answer_db -> CustomerAnswer.changeset(customer_answer_db, params)
     end
     |> Repo.insert_or_update()
+  end
+
+  def list(customer_id) do
+    CustomerAnswer
+    |> join(:inner, [ca], o in Option,
+      on: ca.option_id == o.id and ca.question_id == o.question_id
+    )
+    |> where([ca, o], ca.customer_id == ^customer_id)
+    |> select([ca, o], o.id)
+    |> Repo.all()
   end
 end

@@ -3,6 +3,9 @@ defmodule Camping.Trails do
   alias Camping.Repo
   alias Camping.Trails.Schemas.Trail
   alias Camping.Trails.Schemas.TrailTagOption
+  alias Camping.Tags.Schemas.Tag
+  alias Camping.CustomerAnswers
+  alias Camping.Trails.Schemas.TrailOption
 
   @doc """
   Returns the list of trails.
@@ -42,6 +45,17 @@ defmodule Camping.Trails do
   defp group(query) do
     query
     |> group_by([t], [t.id, t.state, t.city])
+  end
+
+  def list_trails_to_customer(customer_id) do
+    customer_options = CustomerAnswers.list(customer_id)
+
+    TrailOption
+    |> join(:inner, [to], t in Trail, on: t.id == to.trail_id)
+    |> where([to, t], to.option_id in^customer_options)
+    |> select([to, t], t.name)
+    |> group_by([to, t], [to.trail_id, t.name])
+    |> Repo.all()
   end
 
   @doc """
