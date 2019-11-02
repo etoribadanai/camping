@@ -48,13 +48,15 @@ defmodule Camping.Trails do
   end
 
   def list_trails_to_customer(customer_id) do
-    customer_options = CustomerAnswers.list(customer_id)
+    # customer_options = CustomerAnswers.list(customer_id)
+    [head | tail] = CustomerAnswers.list(customer_id)
 
     TrailOption
     |> join(:inner, [to], t in Trail, on: t.id == to.trail_id)
-    |> where([to, t], to.option_id in^customer_options)
-    |> select([to, t], t.name)
-    |> group_by([to, t], [to.trail_id, t.name])
+    |> where([to, t], to.option_id == ^head)
+    |> where([to, t], to.option_id in ^tail)
+    |> select([to, t], t)
+    |> group_by([to, t], [to.trail_id, t.name, t.id])
     |> Repo.all()
   end
 
