@@ -51,11 +51,6 @@ defmodule CampingWeb.Router do
       options("/", TagController, only: [:index, :show])
     end
 
-    scope "/trails" do
-      resources("/", TrailController)
-      options("/", TrailController, only: [:index, :show])
-    end
-
     scope "/questions" do
       resources("/", QuestionController)
       options("/", QuestionController, only: [:index, :show])
@@ -85,6 +80,11 @@ defmodule CampingWeb.Router do
     scope "/users" do
       resources("/", UserController)
       options("/", UserController, only: [:index, :show])
+    end
+
+    scope "/trails" do
+      resources("/", TrailController)
+      options("/", TrailController, only: [:index, :show])
     end
   end
 end

@@ -6,6 +6,11 @@ defmodule CampingWeb.TrailController do
 
   alias Camping.Trails
 
+  def index(conn, %{"customer" => "true"}) do
+    trails = Trails.list_trails_to_customer(conn.assigns.signed_user.customer_id)
+    render(conn, "index.json", trails: trails)
+  end
+
   def index(conn, _params) do
     filters = conn.assigns.filters
 

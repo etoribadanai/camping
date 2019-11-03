@@ -1,5 +1,3 @@
-require IEx
-
 defmodule CampingWeb.CustomerAnswerController do
   use CampingWeb, :controller
 
