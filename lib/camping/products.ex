@@ -123,4 +123,10 @@ defmodule Camping.Products do
     end
     |> Repo.insert_or_update()
   end
+
+  def list_to_trails(level) do
+    Product
+    |> where([p], p.level in ^level)
+    |> Repo.all()
+  end
 end

@@ -12,6 +12,7 @@ defmodule Camping.Products.Schemas.Product do
     field :stock, :integer
     field :image, :string
     field :price, :float
+    field :level, :string
 
     timestamps(type: :utc_datetime)
   end
@@ -28,7 +29,8 @@ defmodule Camping.Products.Schemas.Product do
       :obs,
       :stock,
       :image,
-      :price
+      :price,
+      :level
     ])
   end
 end
