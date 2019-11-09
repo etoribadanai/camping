@@ -124,9 +124,23 @@ defmodule Camping.Products do
     |> Repo.insert_or_update()
   end
 
-  def list_to_trails(level) do
+  @doc """
+  Gets a list of products according to trail level.
+
+  Raises `Ecto.NoResultsError` if the Product does not exist.
+
+  ## Examples
+
+      iex> list_to_trail("Difícil")
+      %Product{}
+
+      iex> get_product("Difícil")
+      []
+
+  """
+  def list_to_trail(level) do
     Product
-    |> where([p], p.level in ^level)
+    |> where([p], p.level == ^level)
     |> Repo.all()
   end
 end

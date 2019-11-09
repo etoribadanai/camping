@@ -6,18 +6,22 @@ defmodule CampingWeb.ProductController do
 
   alias Camping.Products
   alias Camping.Trails
+  alias alias Camping.Trails.Schemas.Trail
+
+  def index(conn, %{"trail" => trail_id}) do
+    with %Trail{} = trail <- Trails.get_trail(String.to_integer(trail_id)) do
+      products = Products.list_to_trail(trail.level)
+      render(conn, "index.json", products: products)
+    else
+      _ -> json(conn, %{message: "Error loading products to trail."})
+    end
+  end
 
   def index(conn, _params) do
     filters = conn.assigns.filters
-
     products = Products.list_products(filters)
-    render(conn, "index.json", products: products)
-  end
 
-  def index(conn, %{"trail" => trail_id}) do
-    with {:ok, trail} <- Trails.get_trail(trail_id) do
-      Products.list_to_trail(trail.level)
-    end
+    render(conn, "index.json", products: products)
   end
 
   def create(conn, %{"product_tag_option" => params}) do
