@@ -48,7 +48,7 @@ defmodule Camping.Trails do
   end
 
   def list_trails_to_customer(customer_id) do
-    [kind | options] = CustomerAnswers.list(customer_id)
+    [kind | options] = CustomerAnswers.list(customer_id, false)
 
     TrailOption
     |> join(:inner, [to], t in Trail, on: t.id == to.trail_id)

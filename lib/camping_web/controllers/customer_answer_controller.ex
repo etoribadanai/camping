@@ -5,6 +5,7 @@ defmodule CampingWeb.CustomerAnswerController do
   alias Camping.Accounts.CustomerAnswer.CreateOrUpdateHandler
   alias Camping.Quiz.Schemas.Question
   alias Camping.Quiz.Schemas.Option
+  alias Camping.CustomerAnswers
 
   action_fallback(CampingWeb.FallbackController)
 
@@ -24,5 +25,10 @@ defmodule CampingWeb.CustomerAnswerController do
         |> put_status(:bad_request)
         |> json(%{data: %{message: "Something went wrong", details: err}})
     end
+  end
+
+  def list_answers(conn, %{"id" => customer_id}) do
+    customer_answers = CustomerAnswers.list(customer_id, true)
+    json(conn, %{data: customer_answers})
   end
 end

@@ -29,13 +29,18 @@ defmodule Camping.CustomerAnswers do
     |> Repo.insert_or_update()
   end
 
-  def list(customer_id) do
+  def list(customer_id, details) do
     CustomerAnswer
     |> join(:inner, [ca], o in Option,
       on: ca.option_id == o.id and ca.question_id == o.question_id
     )
     |> where([ca, o], ca.customer_id == ^customer_id)
-    |> select([ca, o], o.id)
+    |> select_fields(details)
     |> Repo.all()
   end
+
+  defp select_fields(query, _details = false), do: query |> select([ca, o], o.id)
+
+  defp select_fields(query, _details = true),
+    do: query |> select([ca, o], %{question_id: ca.question_id, option_id: o.id})
 end

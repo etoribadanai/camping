@@ -77,6 +77,8 @@ defmodule CampingWeb.Router do
       options("/", CustomerController, only: [:index, :show])
       post("/answer", CustomerAnswerController, :create_or_update)
       options("/answer", CustomerAnswerController, :create_or_update)
+      get "/:id/answers", CustomerAnswerController, :list_answers
+      options "/:id/answers", CustomerAnswerController, :list_answers
     end
 
     scope "/users" do
