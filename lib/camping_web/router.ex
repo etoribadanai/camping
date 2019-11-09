@@ -63,6 +63,8 @@ defmodule CampingWeb.Router do
     scope "/products" do
       resources("/", ProductController)
       options("/", ProductController, only: [:index, :show])
+      get "/trail/:id", ProductController, :products_to_trail
+      options "/trail/:id", ProductController, :products_to_trail
     end
 
     scope "/orders" do
