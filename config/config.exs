@@ -22,6 +22,10 @@ config :logger, :console,
   format: "$time $metadata[$level] $message\n",
   metadata: [:request_id]
 
+config :camping, Camping.Email.Mailer,
+  adapter: Bamboo.SparkPostAdapter,
+  api_key: "efbf17887fa4cc76f7bf0eddb76f9ad5830b09b8"
+
 # Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason
 

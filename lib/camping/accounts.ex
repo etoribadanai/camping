@@ -85,6 +85,7 @@ defmodule Camping.Accounts do
 
   """
   def get_by(fields), do: Repo.get_by(Customer, fields)
+  def get_user_by(fields), do: Repo.get_by(User, fields)
   def get_social_by(fields), do: Repo.get_by(Social, fields)
 
   def token_sign_in(email, password) do
@@ -209,6 +210,24 @@ defmodule Camping.Accounts do
   def update_customer(%Customer{} = customer, attrs) do
     customer
     |> Customer.changeset(attrs)
+    |> Repo.update()
+  end
+
+  @doc """
+  Updates a User password.
+
+  ## Examples
+
+      iex> update_password(user, %{field: new_value})
+      {:ok, %User{}}
+
+      iex> update_password(user, %{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def update_password(%User{} = user, attrs) do
+    user
+    |> User.changeset(attrs)
     |> Repo.update()
   end
 

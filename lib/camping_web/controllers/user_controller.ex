@@ -6,8 +6,9 @@ defmodule CampingWeb.UserController do
   alias Camping.Guardian
   alias Camping.Accounts.Schemas.Customer
   alias Camping.Accounts.Schemas.User
+  alias Camping.Accounts.User.HandleResetPassword
 
-  action_fallback CampingWeb.FallbackController
+  # action_fallback CampingWeb.FallbackController
 
   def index(conn, _params) do
     users = Accounts.list_users()
@@ -33,5 +34,13 @@ defmodule CampingWeb.UserController do
   def show(conn, _params) do
     user = Guardian.Plug.current_resource(conn)
     conn |> render("user.json", user: user)
+  end
+
+  def reset_password(conn, %{"email" => email}) do
+    with {:ok, user} <- HandleResetPassword.execute(email) do
+      HandleResetPassword.send(user)
+    else
+      {:error, msg} -> json(conn, %{message: msg})
+    end
   end
 end

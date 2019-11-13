@@ -46,7 +46,10 @@ defmodule Camping.MixProject do
       {:comeonin, "~> 4.0"},
       {:bcrypt_elixir, "~> 1.0"},
       {:guardian, "~> 1.0"},
-      {:cors_plug, "~> 2.0"}
+      {:cors_plug, "~> 2.0"},
+      {:tesla, "~> 1.3.0"},
+      {:bamboo, "~> 1.2"},
+      {:bamboo_sparkpost, "~> 1.1"}
     ]
   end
 

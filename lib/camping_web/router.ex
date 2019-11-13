@@ -39,6 +39,8 @@ defmodule CampingWeb.Router do
       options("/create", UserController, :create)
       post("/sign_in", UserController, :sign_in)
       options("/sign_in", UserController, :sign_in)
+      post("/reset_password", UserController, :reset_password)
+      options("/reset_password", UserController, :reset_password)
     end
 
     scope "/social" do

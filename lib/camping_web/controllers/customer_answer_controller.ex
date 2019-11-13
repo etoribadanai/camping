@@ -27,8 +27,8 @@ defmodule CampingWeb.CustomerAnswerController do
     end
   end
 
-  def list_answers(conn, %{"id" => customer_id}) do
-    customer_answers = CustomerAnswers.list(customer_id, true)
+  def list_answers(conn, %{"id" => _customer_id}) do
+    customer_answers = CustomerAnswers.list(conn.assigns.signed_user.customer_id, true)
     json(conn, %{data: customer_answers})
   end
 end
