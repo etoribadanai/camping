@@ -20,8 +20,8 @@ defmodule Camping.Trails.Schemas.Trail do
   end
 
   @doc false
-  def changeset(product, attrs) do
-    product
+  def changeset(trail, attrs) do
+    trail
     |> cast(attrs, [
       :name,
       :state,
