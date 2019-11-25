@@ -49,7 +49,8 @@ defmodule Camping.MixProject do
       {:cors_plug, "~> 2.0"},
       {:tesla, "~> 1.3.0"},
       {:bamboo, "~> 1.2"},
-      {:bamboo_sparkpost, "~> 1.1"}
+      {:bamboo_sparkpost, "~> 1.1"},
+      {:ex_machina, "~> 2.3", only: :test}
     ]
   end
 
