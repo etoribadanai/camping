@@ -31,4 +31,9 @@ defmodule CampingWeb.CustomerAnswerController do
     customer_answers = CustomerAnswers.list(conn.assigns.signed_user.customer_id, true)
     json(conn, %{data: customer_answers})
   end
+
+  def customer_answered_count(conn, %{"id" => _customer_id}) do
+    count_answered = CustomerAnswers.count_required_answered(conn.assigns.signed_user.customer_id)
+    json(conn, %{data: count_answered})
+  end
 end

@@ -81,6 +81,8 @@ defmodule CampingWeb.Router do
       options("/answer", CustomerAnswerController, :create_or_update)
       get "/:id/answers", CustomerAnswerController, :list_answers
       options "/:id/answers", CustomerAnswerController, :list_answers
+      get "/:id/answers/count", CustomerAnswerController, :customer_answered_count
+      options "/:id/answers/count", CustomerAnswerController, :customer_answered_count
     end
 
     scope "/users" do
