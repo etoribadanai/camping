@@ -1,7 +1,6 @@
 defmodule SocialLoginTest do
   use ExUnit.Case, async: true
   doctest CampingWeb.SocialController
-  import Camping.Factory
   alias Camping.Accounts.Social.HandleCreate
 
   setup do
@@ -18,7 +17,7 @@ defmodule SocialLoginTest do
             "provider" => "Facebook",
             "token" => "31293819028301203",
             "uid" => "12313",
-            "email" => ""
+            "email" => "test@test.com.br"
           }
         )
       assert social != nil
@@ -32,7 +31,6 @@ defmodule SocialLoginTest do
             "name" => "Etori",
             "image" => "xpto",
             "provider" => "Facebook",
-            # "token" => "31293819028301203",
             "uid" => "12313",
             "email" => "test@test.com.br"
           }
