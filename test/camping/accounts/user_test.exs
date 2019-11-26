@@ -22,7 +22,7 @@ defmodule UserTest do
       customer = Factory.insert(:customer)
       {:error, msg} = Accounts.create_user(customer.id, %{"email" => customer.email})
 
-        assert msg.errors == [password: {"can't be blank", [validation: :required]}]
+      assert msg.errors == [password: {"can't be blank", [validation: :required]}]
     end
   end
 end
