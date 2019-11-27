@@ -94,5 +94,10 @@ defmodule CampingWeb.Router do
       resources("/", TrailController)
       options("/", TrailController, only: [:index, :show])
     end
+
+    scope "/campings" do
+      resources("/", CampingController)
+      options("/", CampingController, only: [:index, :show])
+    end
   end
 end
