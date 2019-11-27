@@ -2,15 +2,15 @@ defmodule Camping.Orders.Order.HandleCreate do
   alias Camping.Orders
   alias Camping.Orders.Detail.HandleCreate
 
-  def create(params, user_id) do
+  def create(params, customer_id) do
     params
-    |> Map.put("user_id", user_id)
+    |> Map.put("customer_id", customer_id)
     |> execute_create()
   end
 
   defp execute_create(params) do
     with response = {:ok, order} <-
-           Orders.create_order(%{obs: params["obs"], user_id: params["user_id"]}) do
+           Orders.create_order(%{obs: params["obs"], customer_id: params["customer_id"]}) do
       create_order_details(order.id, params["products_ids"])
 
       response
