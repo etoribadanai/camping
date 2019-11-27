@@ -16,6 +16,8 @@ defmodule CampingWeb.UserController do
   end
 
   def create(conn, params) do
+    IO.inspect(params, label: "User create")
+
     with {:ok, %Customer{} = customer} <- Accounts.create_customer(params),
          {:ok, %User{} = user} <- Accounts.create_user(customer.id, params),
          {:ok, token, _claims} <- Guardian.encode_and_sign(user),
@@ -37,6 +39,8 @@ defmodule CampingWeb.UserController do
   end
 
   def reset_password(conn, %{"email" => email}) do
+    IO.inspect(email, label: "User reset password")
+
     with {:ok, user} <- HandleResetPassword.execute(email) do
       HandleResetPassword.send(user)
     else

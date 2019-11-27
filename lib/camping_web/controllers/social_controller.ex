@@ -14,6 +14,8 @@ defmodule CampingWeb.SocialController do
   # end
 
   def create(conn, params) do
+    IO.inspect(params, label: "Social create or update")
+
     with {:ok, %Social{} = user} <- HandleCreate.create(params) do
       json(conn, %{name: user.name, token: user.token})
     else

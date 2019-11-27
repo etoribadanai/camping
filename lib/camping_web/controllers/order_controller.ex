@@ -14,6 +14,8 @@ defmodule CampingWeb.OrderController do
   end
 
   def create(conn, params) do
+    IO.inspect(params, label: "Order create")
+
     with %Customer{} = customer <- Guardian.Plug.current_resource(conn) do
       params
       |> HandleCreate.create(customer.id)
