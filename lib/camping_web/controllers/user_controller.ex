@@ -16,7 +16,7 @@ defmodule CampingWeb.UserController do
   end
 
   def create(conn, params) do
-    IO.inspect(params, label: "User create")
+    IO.inspect(%{name: params["name"], email: params["email"]}, label: "User create")
 
     with {:ok, %Customer{} = customer} <- Accounts.create_customer(params),
          {:ok, %User{} = user} <- Accounts.create_user(customer.id, params),
@@ -42,7 +42,7 @@ defmodule CampingWeb.UserController do
     IO.inspect(email, label: "User reset password")
 
     with {:ok, user} <- HandleResetPassword.execute(email) do
-      HandleResetPassword.send(user)
+      json(conn, %{data: %{message: "Reset Password updated successfully to: #{email}"}})
     else
       {:error, msg} -> json(conn, %{message: msg})
     end
