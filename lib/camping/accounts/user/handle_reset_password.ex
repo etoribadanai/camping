@@ -39,7 +39,6 @@ defmodule Camping.Accounts.User.HandleResetPassword do
     :crypto.strong_rand_bytes(length)
     |> Base.encode64()
     |> binary_part(0, length)
-    |> IO.inspect()
     |> save_new_password(user)
   end
 
