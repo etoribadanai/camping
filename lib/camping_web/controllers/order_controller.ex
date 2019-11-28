@@ -6,8 +6,6 @@ defmodule CampingWeb.OrderController do
   alias Camping.Accounts.Schemas.Customer
   alias Camping.Guardian
 
-  action_fallback CampingWeb.FallbackController
-
   def index(conn, _params) do
     orders = Orders.list_order()
     render(conn, "index.json", orders: orders)
@@ -16,11 +14,9 @@ defmodule CampingWeb.OrderController do
   def create(conn, params) do
     IO.inspect(params, label: "Order create")
 
-    with %Customer{} = customer <- Guardian.Plug.current_resource(conn) do
-      params
-      |> HandleCreate.create(customer.id)
-      |> handle_create_order(conn)
-    end
+    params
+    |> HandleCreate.create(conn.assigns.signed_user.customer_id)
+    |> handle_create_order(conn)
   end
 
   defp handle_create_order({:ok, order}, conn), do: json(conn, %{order_id: order.id})

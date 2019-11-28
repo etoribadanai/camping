@@ -8,9 +8,9 @@ defmodule CampingWeb.CampingController do
 
   def index(conn, _params) do
     filters = conn.assigns.filters
+    campings = Campings.list(filters)
 
-    camping = Campings.list(filters)
-    render(conn, "index.json", camping: camping)
+    render(conn, "index.json", campings: campings)
   end
 
   def show(conn, %{"id" => id}) do

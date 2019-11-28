@@ -16,7 +16,8 @@ defmodule CampingWeb.CampingView do
       name: camping.name,
       state: camping.state,
       city: camping.city,
-      distance_from_capital: camping.distance_from_capital
+      distance_from_capital: camping.distance_from_capital,
+      description: camping.description
     }
   end
 end
