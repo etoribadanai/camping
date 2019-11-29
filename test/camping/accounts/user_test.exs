@@ -24,5 +24,23 @@ defmodule UserTest do
 
       assert msg.errors == [password: {"can't be blank", [validation: :required]}]
     end
+
+    test "sign in when passed all fields correctly" do
+      customer = Factory.insert(:customer)
+      {:ok, user} = Accounts.create_user(customer.id, %{"email" => customer.email, "password" => "123456"})
+
+      {:ok, token, _name} = Accounts.token_sign_in(user.email, user.password)
+
+      assert token != nil
+    end
+
+    @tag :mustexec
+    test "sign in when passed wrong password" do
+      customer = Factory.insert(:customer)
+      {:ok, user} = Accounts.create_user(customer.id, %{"email" => customer.email, "password" => "123456"})
+      {:error, msg} = Accounts.token_sign_in(user.email, "xpto123")
+
+      assert msg == :unauthorized
+    end
   end
 end

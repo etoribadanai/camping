@@ -8,4 +8,12 @@ defmodule Camping.Factory do
       email: "test@test.com.br"
     }
   end
+
+  def product_factory do
+    %Camping.Products.Schemas.Product{
+      code: sequence(:code, &"1#{&1}"),
+      description: "ProdTest",
+      price: :rand.uniform(1000) / 1
+    }
+  end
 end
