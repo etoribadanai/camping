@@ -12,6 +12,10 @@ defmodule CampingWeb.OrderController do
   end
 
   def create(conn, params) do
+    IO.inspect(params |> Map.put(:customer_id, conn.assigns.signed_user.customer_id),
+      label: "Order created"
+    )
+
     params
     |> HandleCreate.create(conn.assigns.signed_user.customer_id)
     |> handle_create_order(conn)

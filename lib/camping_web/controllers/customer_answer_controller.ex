@@ -10,6 +10,10 @@ defmodule CampingWeb.CustomerAnswerController do
   action_fallback(CampingWeb.FallbackController)
 
   def create_or_update(conn, params) do
+    IO.inspect(params |> Map.put(:customer_id, conn.assigns.signed_user.customer_id),
+      label: "Customer Answered"
+    )
+
     with %Question{} <- _question = Quiz.get_question(params["question_id"]),
          %Option{} <- _option = Quiz.get_option(params["option_id"]),
          {:ok, _customer_answer} <-
