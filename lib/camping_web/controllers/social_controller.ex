@@ -17,7 +17,7 @@ defmodule CampingWeb.SocialController do
     IO.inspect(params, label: "Social create or update")
 
     with {:ok, %Social{} = user} <- HandleCreate.create(params) do
-      json(conn, %{name: user.name, token: user.token})
+      json(conn, %{name: user.name, token: user.token, admin: user.admin, msg: "APP em desenvolvimento"})
     else
       err ->
         conn

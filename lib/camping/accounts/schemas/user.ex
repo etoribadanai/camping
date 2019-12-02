@@ -8,6 +8,7 @@ defmodule Camping.Accounts.Schemas.User do
     field :password_hash, :string
     field :token, :string, size: 1000
     field :customer_id, :integer
+    field :admin, :boolean, default: false
 
     timestamps()
   end
@@ -15,7 +16,7 @@ defmodule Camping.Accounts.Schemas.User do
   @doc false
   def changeset(user, attrs) do
     user
-    |> cast(attrs, [:email, :password, :customer_id])
+    |> cast(attrs, [:email, :password, :customer_id, :admin])
     |> validate_required([:email, :password, :customer_id])
     |> validate_length(:password, min: 6, max: 20)
     |> unique_constraint(:email, name: :users_email_index, downcase: true)
