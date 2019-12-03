@@ -17,12 +17,33 @@ defmodule CampingWeb.SocialController do
     IO.inspect(params, label: "Social create or update")
 
     with {:ok, %Social{} = user} <- HandleCreate.create(params) do
-      json(conn, %{name: user.name, token: user.token, admin: user.admin, msg: "APP em desenvolvimento"})
+      json(conn, %{
+        name: user.name,
+        token: user.token,
+        admin: user.admin,
+        msg: "APP em desenvolvimento"
+      })
     else
       err ->
         conn
         |> put_status(:bad_request)
         |> json(%{data: %{message: "Something went wrong to create user #{params["email"]}"}})
+    end
+  end
+
+  def sign_in(conn, %{"token" => token}) do
+    with %Social{} = user <- Camping.Accounts.get_social_by(token: token) do
+      json(conn, %{
+        name: user.name,
+        token: user.token,
+        admin: user.admin,
+        msg: "APP em desenvolvimento"
+      })
+    else
+      err ->
+        conn
+        |> put_status(:bad_request)
+        |> json(%{data: %{message: "Something went wrong to signin with social login"}})
     end
   end
 end

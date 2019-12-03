@@ -46,6 +46,8 @@ defmodule CampingWeb.Router do
     scope "/social" do
       post("/create", SocialController, :create)
       options("/create", SocialController, :create)
+      post("/sign_in", SocialController, :sign_in)
+      options("/sign_in", SocialController, :sign_in)
     end
 
     scope "/tags" do
