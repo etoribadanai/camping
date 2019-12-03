@@ -17,6 +17,8 @@ defmodule CampingWeb.UserController do
 
   def create(conn, params) do
     IO.inspect(%{name: params["name"], email: params["email"]}, label: "User create")
+    # TODO verificar se email / CPF é valido
+    # TODO verificar se o email ja foi cadastrado / CPF
 
     with {:ok, %Customer{} = customer} <- Accounts.create_customer(params),
          {:ok, %User{} = user} <- Accounts.create_user(customer.id, params),
