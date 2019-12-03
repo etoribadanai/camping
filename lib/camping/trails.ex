@@ -48,8 +48,11 @@ defmodule Camping.Trails do
   end
 
   def list_trails_to_customer(customer_id) do
-    [kind | options] = CustomerAnswers.list(customer_id, false)
+    CustomerAnswers.list(customer_id, false)
+    |> build_search_query()
+  end
 
+  defp build_search_query([kind | options]) do
     TrailOption
     |> join(:inner, [to], t in Trail, on: t.id == to.trail_id)
     |> where([to, t], t.kind == ^kind)
@@ -58,6 +61,8 @@ defmodule Camping.Trails do
     |> group_by([to, t], [to.trail_id, t.name, t.id])
     |> Repo.all()
   end
+
+  defp build_search_query([]), do: []
 
   @doc """
   Gets a single trail.
