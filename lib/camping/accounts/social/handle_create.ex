@@ -20,12 +20,27 @@ defmodule Camping.Accounts.Social.HandleCreate do
   end
 
   defp handle_create_customer({:ok, customer}, params) do
-    Map.put(params, "customer_id", customer.id)
+    params
+    |> Map.put("customer_id", customer.id)
+    |> valid_token(params["token"])
     |> create_social_login
   end
 
   defp create_social_login(social_params) do
     social_params
     |> Accounts.create_social_login()
+  end
+
+  defp valid_token(params, token) do
+    case token == nil || token == "" do
+      true -> params |> Map.put("token", generate_token())
+      _ -> params
+    end
+  end
+
+  defp generate_token(length \\ 80) do
+    :crypto.strong_rand_bytes(length)
+    |> Base.encode64()
+    |> binary_part(0, length)
   end
 end
