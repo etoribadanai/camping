@@ -11,7 +11,15 @@ defmodule CampingWeb.CustomerView do
   end
 
   def render("customer.json", %{customer: customer}) do
-    %{id: customer.id, email: customer.email, name: customer.name}
+    %{
+      id: customer.id,
+      email: customer.email,
+      name: customer.name,
+      birth_date: customer.birth_date,
+      cpf: customer.cpf,
+      phone_area: customer.phone_area,
+      phone_number: customer.phone_number
+    }
   end
 
   def render("jwt.json", %{jwt: jwt}) do
