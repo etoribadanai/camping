@@ -1,5 +1,3 @@
-require IEx
-
 defmodule Camping.CustomerAnswers do
   @moduledoc """
   The Customer Answers context.

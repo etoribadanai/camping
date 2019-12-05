@@ -55,6 +55,22 @@ defmodule Camping.Accounts do
   def get_customer(id), do: Repo.get(Customer, id)
 
   @doc """
+  Gets a single customer.
+
+  Raises `Ecto.NoResultsError` if the customer does not exist.
+
+  ## Examples
+
+      iex> get_customer_by(cpf: "3702568974")
+      %Customer{}
+
+      iex> get_customer_by(cpf: "3702568974")
+      nil
+
+  """
+  def get_customer_by(fields), do: Repo.get_by(Customer, fields)
+
+  @doc """
   Gets a single user.
 
   Raises `Ecto.NoResultsError` if the user does not exist.
@@ -88,8 +104,21 @@ defmodule Camping.Accounts do
   def get_user_by(fields), do: Repo.get_by(User, fields)
   def get_social_by(fields), do: Repo.get_by(Social, fields)
 
-  def token_sign_in(email, password) do
-    with {:ok, user} <- email_password_auth(email, password),
+  def token_sign_in(value, password) do
+    cond do
+      is_email?(value) == true ->
+        sign_in_with_email(value, password)
+
+      is_cpf?(value) == true ->
+        sign_in_with_cpf(value, password)
+
+      true ->
+        {:error, "Value is not valid to sign_in"}
+    end
+  end
+
+  defp sign_in_with_email(value, password) do
+    with {:ok, user} <- email_password_auth(value, password),
          {:ok, token, _claims} = Guardian.encode_and_sign(user),
          {:ok, _} <- store_token(user, token) do
       {:ok, token, get_customer(user.customer_id).name}
@@ -97,6 +126,21 @@ defmodule Camping.Accounts do
       _ -> {:error, :unauthorized}
     end
   end
+
+  defp sign_in_with_cpf(value, password) do
+    with %Customer{} = customer <- get_customer_by(cpf: value),
+         %User{} = user <- get_user_by(customer_id: customer.id),
+         {:ok, user} <- email_password_auth(user.email, password),
+         {:ok, token, _claims} = Guardian.encode_and_sign(user),
+         {:ok, _} <- store_token(user, token) do
+      {:ok, token, get_customer(user.customer_id).name}
+    else
+      _ -> {:error, :unauthorized}
+    end
+  end
+
+  defp is_email?(value), do: String.contains?(value, "@")
+  defp is_cpf?(value), do: Regex.match?(~r/\d/, value)
 
   defp email_password_auth(email, password) when is_binary(email) and is_binary(password) do
     with {:ok, user} <- get_by_email(email) do

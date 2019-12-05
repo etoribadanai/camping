@@ -7,6 +7,7 @@ defmodule CampingWeb.UserController do
   alias Camping.Accounts.Schemas.Customer
   alias Camping.Accounts.Schemas.User
   alias Camping.Accounts.User.HandleResetPassword
+  alias Camping.Accounts.User.HandleCreate
 
   # action_fallback CampingWeb.FallbackController
 
@@ -17,21 +18,26 @@ defmodule CampingWeb.UserController do
 
   def create(conn, params) do
     IO.inspect(%{name: params["name"], email: params["email"]}, label: "User create")
-    # TODO verificar se email / CPF é valido
-    # TODO verificar se o email ja foi cadastrado / CPF
 
-    with {:ok, %Customer{} = customer} <- Accounts.create_customer(params),
-         {:ok, %User{} = user} <- Accounts.create_user(customer.id, params),
-         {:ok, token, _claims} <- Guardian.encode_and_sign(user),
-         {:ok, _} <- Accounts.store_token(user, token) do
-      json(conn, %{name: customer.name, token: token})
+    with {:ok, response} <- HandleCreate.create(params) do
+      json(conn, %{name: response.name, token: response.token})
+    else
+      {:error, msg} ->
+        conn
+        |> put_status(:bad_request)
+        |> json(%{data: %{message: msg}})
     end
   end
 
-  def sign_in(conn, %{"email" => email, "password" => password}) do
-    case Accounts.token_sign_in(email, password) do
-      {:ok, token, name} -> json(conn, %{data: %{jwt: token, name: name}})
-      _ -> {:error, :unauthorized}
+  def sign_in(conn, %{"value" => value, "password" => password}) do
+    case Accounts.token_sign_in(value, password) do
+      {:ok, token, name} ->
+        json(conn, %{data: %{jwt: token, name: name}})
+
+      {:error, msg} ->
+        conn
+        |> put_status(:bad_request)
+        |> json(%{data: %{message: msg}})
     end
   end
 

@@ -5,7 +5,10 @@ defmodule Camping.Factory do
   def customer_factory do
     %Camping.Accounts.Schemas.Customer{
       name: "Mr. Test",
-      email: "test@test.com.br"
+      cpf: "#{Enum.random(0..99_999_999_999)}",
+      phone_area: "11",
+      phone_number: "123455678",
+      birth_date: "1996-05-16"
     }
   end
 
