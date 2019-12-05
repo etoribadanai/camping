@@ -22,8 +22,15 @@ defmodule Camping.Accounts do
 
   """
   def list_customers do
-    Repo.all(Customer)
+    Customer
+    |> Repo.all()
+    |> Enum.map(fn customer ->
+      customer
+      |> Map.put(:email, get_email(customer.id))
+    end)
   end
+
+  defp get_email(customer_id), do: get_user_by(customer_id: customer_id).email
 
   @doc """
   Returns the list of users.
@@ -52,7 +59,12 @@ defmodule Camping.Accounts do
       nil
 
   """
-  def get_customer(id), do: Repo.get(Customer, id)
+  def get_customer(id) do
+    Customer
+    |> where([c], c.id == ^id)
+    |> Repo.one()
+    |> Map.put(:email, get_email(id))
+  end
 
   @doc """
   Gets a single customer.
