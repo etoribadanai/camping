@@ -8,6 +8,8 @@ defmodule Camping.Camp.Schemas.Camping do
     field :city, :string
     field :distance_from_capital, :float
     field :description, :string, size: 1000
+    field :latitude, :float
+    field :longitude, :float
 
     timestamps(type: :utc_datetime)
   end
@@ -20,7 +22,9 @@ defmodule Camping.Camp.Schemas.Camping do
       :state,
       :city,
       :distance_from_capital,
-      :description
+      :description,
+      :latitude,
+      :longitude
     ])
     |> validate_required([:name, :state, :city, :description])
   end

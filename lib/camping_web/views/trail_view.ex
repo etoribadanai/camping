@@ -23,7 +23,9 @@ defmodule CampingWeb.TrailView do
       start: trail.start,
       finish: trail.finish,
       nearby: trail.nearby,
-      description: trail.description
+      description: trail.description,
+      latitude: trail.latitude,
+      longitude: trail.longitude
     }
   end
 end

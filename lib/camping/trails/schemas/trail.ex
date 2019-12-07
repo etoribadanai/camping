@@ -15,6 +15,8 @@ defmodule Camping.Trails.Schemas.Trail do
     field :nearby, :string
     field :description, :string, size: 1000
     field :kind, :integer
+    field :latitude, :float
+    field :longitude, :float
 
     timestamps(type: :utc_datetime)
   end
@@ -34,7 +36,9 @@ defmodule Camping.Trails.Schemas.Trail do
       :finish,
       :nearby,
       :description,
-      :kind
+      :kind,
+      :latitude,
+      :longitude
     ])
   end
 end
