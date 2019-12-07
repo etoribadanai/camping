@@ -1,3 +1,5 @@
+require IEx
+
 defmodule Camping.Products do
   import Ecto.Query, warn: false
   alias Camping.Repo
@@ -75,7 +77,7 @@ defmodule Camping.Products do
 
   """
   def create_or_update_product(product) do
-    case Repo.get_by(Product, code: product.code) do
+    case Repo.get_by(Product, code: product["code"]) do
       nil -> Product.changeset(%Product{}, product)
       product_db -> Product.changeset(product_db, product)
     end

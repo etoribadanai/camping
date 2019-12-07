@@ -1,3 +1,5 @@
+require IEx
+
 defmodule CampingWeb.ProductController do
   use CampingWeb, :controller
 
@@ -22,6 +24,12 @@ defmodule CampingWeb.ProductController do
     products = Products.list_products(filters)
 
     render(conn, "index.json", products: products)
+  end
+
+  def create(conn, %{"product" => params}) do
+    with {:ok, product} <- Products.create_or_update_product(params) do
+      json(conn, %{message: "Productid: #{product.id} created successfully."})
+    end
   end
 
   def create(conn, %{"product_tag_option" => params}) do
