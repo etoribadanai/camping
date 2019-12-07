@@ -58,4 +58,22 @@ defmodule Camping.Campings do
 
   """
   def get(id), do: Repo.get(Camping, id)
+
+  @doc """
+  Creates a camping.
+
+  ## Examples
+
+      iex> create(%{field: value})
+      {:ok, %Camping{}}
+
+      iex> create(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create(attrs \\ %{}) do
+    %Camping{}
+    |> Camping.changeset(attrs)
+    |> Repo.insert()
+  end
 end

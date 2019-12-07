@@ -89,12 +89,30 @@ defmodule Camping.Trails do
       {:ok, %Trail{}}
 
   """
-  def create_or_update_trail(trail) do
-    case Repo.get_by(Trail, id: trail.id) do
-      nil -> Trail.changeset(%Trail{}, trail)
-      trail_db -> Trail.changeset(trail_db, trail)
-    end
-    |> Repo.insert_or_update()
+  # def create_or_update_trail(trail) do
+  #   case Repo.get_by(Trail, id: trail["id"]) do
+  #     nil -> Trail.changeset(%Trail{}, trail)
+  #     trail_db -> Trail.changeset(trail_db, trail)
+  #   end
+  #   |> Repo.insert_or_update()
+  # end
+
+  @doc """
+  Creates a trail.
+
+  ## Examples
+
+      iex> create(%{field: value})
+      {:ok, %Trail{}}
+
+      iex> create(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create(attrs \\ %{}) do
+    %Trail{}
+    |> Trail.changeset(attrs)
+    |> Repo.insert()
   end
 
   @doc """

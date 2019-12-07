@@ -11,8 +11,9 @@ defmodule CampingWeb.Router do
   end
 
   pipeline :api do
-    plug CORSPlug,
+    plug(CORSPlug,
       origin: ["*"]
+    )
 
     plug(:fetch_session)
     plug(:fetch_flash)
@@ -67,8 +68,8 @@ defmodule CampingWeb.Router do
     scope "/products" do
       resources("/", ProductController)
       options("/", ProductController, only: [:index, :show])
-      get "/trail/:id", ProductController, :products_to_trail
-      options "/trail/:id", ProductController, :products_to_trail
+      get("/trail/:id", ProductController, :products_to_trail)
+      options("/trail/:id", ProductController, :products_to_trail)
     end
 
     scope "/orders" do
@@ -81,10 +82,10 @@ defmodule CampingWeb.Router do
       options("/", CustomerController, only: [:index, :show])
       post("/answer", CustomerAnswerController, :create_or_update)
       options("/answer", CustomerAnswerController, :create_or_update)
-      get "/:id/answers", CustomerAnswerController, :list_answers
-      options "/:id/answers", CustomerAnswerController, :list_answers
-      get "/:id/answers/count", CustomerAnswerController, :customer_answered_count
-      options "/:id/answers/count", CustomerAnswerController, :customer_answered_count
+      get("/:id/answers", CustomerAnswerController, :list_answers)
+      options("/:id/answers", CustomerAnswerController, :list_answers)
+      get("/:id/answers/count", CustomerAnswerController, :customer_answered_count)
+      options("/:id/answers/count", CustomerAnswerController, :customer_answered_count)
     end
 
     scope "/users" do
