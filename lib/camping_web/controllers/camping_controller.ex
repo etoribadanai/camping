@@ -17,4 +17,15 @@ defmodule CampingWeb.CampingController do
     camping = Campings.get(id)
     render(conn, "show.json", camping: camping)
   end
+
+  def create(conn, %{"camping" => params}) do
+    with {:ok, camping} <- Campings.create(params) do
+      json(conn, %{message: "Camping_id: #{camping.id} created successfully."})
+    else
+      err ->
+        conn
+        |> put_status(:bad_request)
+        |> json(%{data: %{message: "Something went wrong", details: err}})
+    end
+  end
 end

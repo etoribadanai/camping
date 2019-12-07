@@ -1,3 +1,5 @@
+require IEx
+
 defmodule CampingWeb.TrailController do
   use CampingWeb, :controller
 
@@ -18,9 +20,25 @@ defmodule CampingWeb.TrailController do
     render(conn, "index.json", trails: trails)
   end
 
+  def create(conn, %{"trail" => params}) do
+    with {:ok, trail} <- Trails.create(params) do
+      json(conn, %{message: "Trail_id: #{trail.id} created successfully."})
+    else
+      err ->
+        conn
+        |> put_status(:bad_request)
+        |> json(%{data: %{message: "Something went wrong", details: err}})
+    end
+  end
+
   def create(conn, %{"trail_tag_option" => params}) do
     with {:ok, trail_tag_option} <- Trails.create_trail_tag_option(params) do
       json(conn, %{message: "Trail_id: #{trail_tag_option.id} created successfully."})
+    else
+      err ->
+        conn
+        |> put_status(:bad_request)
+        |> json(%{data: %{message: "Something went wrong", details: err}})
     end
   end
 
